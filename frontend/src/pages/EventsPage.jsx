@@ -45,7 +45,7 @@ export const EventsPage = () => {
   }
 
   return (
-    <section className="space-y-8 px-4 md:px-8 xl:px-14 2xl:px-20">
+    <section className="space-y-8  md:px-4 xl:px-10 2xl:px-16">
       <div className="border-b border-[#e8ddd2] pb-6">
         <p className="text-sm uppercase tracking-[0.3em] text-tide">Events</p>
         <h1 className="mt-4 max-w-4xl text-[2.8rem] font-semibold leading-[1.02] text-ink md:text-[3.8rem]">
@@ -59,7 +59,7 @@ export const EventsPage = () => {
       {error && <ErrorMessage message={error} />}
 
       {events.length ? (
-        <div className="divide-y divide-[#e8ddd2]">
+        <div className="divide-y px-4 divide-[#e8ddd2]">
           {events.map((event, index) => (
             <Link
               key={event.id}
