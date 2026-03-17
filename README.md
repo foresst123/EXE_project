@@ -50,14 +50,14 @@ Using Docker (recommended, no local `psql` needed):
 
 ```bash
 docker compose exec -T db psql -U postgres -f /database/schema.sql
-docker compose exec -T db psql -U postgres -d artdict_db -f /database/seed.sql
+docker compose exec -T db psql -U postgres -d eartdict_db -f /database/seed.sql
 ```
 
 Using local PostgreSQL:
 
 ```bash
 psql -U postgres -f database/schema.sql
-psql -U postgres -d artdict_db -f database/seed.sql
+psql -U postgres -d exe_store -f database/seed.sql
 ```
 
 ### 4. Install dependencies
