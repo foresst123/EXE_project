@@ -87,7 +87,7 @@ export const AuthorPage = () => {
           <p className="text-sm uppercase tracking-[0.24em] text-moss">By this artist</p>
           <h2 className="mt-2 font-display text-[2.1rem] text-ink md:text-[2.45rem]">Products from {author.name}</h2>
         </div>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
           {author.products.map((product) => (
             <ProductCard
               key={product.id}

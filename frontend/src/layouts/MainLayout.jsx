@@ -108,7 +108,7 @@ export const MainLayout = () => {
         >
           <div
             className={`mx-auto transition-all delay-[90ms] duration-[1150ms] ease-[cubic-bezier(0.23,0.82,0.2,1)] ${
-              isFloating ? "max-w-[980px] px-4" : "max-w-[1680px] px-0"
+              isFloating ? "nav-shell-floating px-0" : "nav-shell px-0"
             }`}
           >
             <div
@@ -313,7 +313,7 @@ export const MainLayout = () => {
         </header>
       ) : null}
 
-      <main className={isStandalonePage ? "mx-auto max-w-[1900px] px-4 pb-14 pt-6 md:px-6" : "mx-auto max-w-7xl px-4 pb-14 pt-8 md:px-6 md:pt-10"}>
+      <main className={isStandalonePage ? "app-shell-wide px-4 pb-14 pt-6 md:px-6" : "app-shell px-2 pb-14 pt-8 md:px-3 md:pt-5"}>
         <Outlet />
       </main>
 

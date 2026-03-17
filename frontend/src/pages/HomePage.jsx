@@ -318,7 +318,7 @@ export const HomePage = () => {
       ) : (
         <>
           <section>
-            <form onSubmit={submitSearch} className="mx-auto max-w-3xl">
+            <form onSubmit={submitSearch} className="mx-auto w-full max-w-3xl xl:max-w-[min(55vw,58rem)]">
               <div className="flex items-center rounded-full border border-mist bg-[#fbfaf8] px-3 py-2 shadow-[0_8px_24px_rgba(20,15,10,0.08)]">
                 <input
                   type="text"
@@ -339,7 +339,7 @@ export const HomePage = () => {
 
           <section className="rounded-[38px] bg-white/88 p-4 shadow-float md:p-5">
             <div className="grid gap-4 xl:grid-cols-[1.95fr,0.95fr]">
-              <div className="relative min-h-[360px] overflow-hidden rounded-[30px] bg-[#e9dfd3]">
+              <div className="relative min-h-[clamp(20rem,25vw,24rem)] overflow-hidden rounded-[30px] bg-[#e9dfd3]">
                 {activeHeroEvent ? (
                   <>
                     <HeroEventSlide
@@ -419,7 +419,7 @@ export const HomePage = () => {
                   <Link
                     key={event.id}
                     to={getEventHref(event)}
-                    className="relative min-h-[172px] overflow-hidden rounded-[26px] border border-white/60 shadow-card"
+                    className="relative min-h-[clamp(10.5rem,12vw,11.75rem)] overflow-hidden rounded-[26px] border border-white/60 shadow-card"
                   >
                     <img
                       src={event.banner_image_url}
@@ -483,7 +483,7 @@ export const HomePage = () => {
         </div>
           </section>
 
-          <div className="space-y-10 px-2 md:px-4 xl:px-7 2xl:px-10">
+          <div className="home-content-shell space-y-10 px-0.5 md:px-2 xl:px-4 2xl:px-6">
             <section className="space-y-5">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
@@ -494,7 +494,7 @@ export const HomePage = () => {
                   Shop all
                 </Link>
               </div>
-              <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
                 {bestSellingProducts.map((product) => (
                   <ProductCard
                     key={`best-${product.id}`}
@@ -519,7 +519,7 @@ export const HomePage = () => {
                   View all products
                 </Link>
               </div>
-              <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
                 {newArrivals.map((product) => (
                   <ProductCard
                     key={`new-${product.id}`}
@@ -548,7 +548,7 @@ export const HomePage = () => {
                     View all in {category.name}
                   </Link>
                 </div>
-                <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
                   {category.items.map((product) => (
                     <ProductCard
                       key={`${category.id}-${product.id}`}

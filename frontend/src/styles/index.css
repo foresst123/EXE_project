@@ -46,6 +46,57 @@ textarea {
   min-height: 100vh;
 }
 
+@layer components {
+  .app-shell {
+    width: min(97.8vw, 84rem);
+    margin-inline: auto;
+  }
+
+  .app-shell-wide {
+    width: min(99vw, 122rem);
+    margin-inline: auto;
+  }
+
+  .nav-shell {
+    width: min(98vw, 111rem);
+    margin-inline: auto;
+  }
+
+  .nav-shell-floating {
+    width: min(calc(100vw - 1rem), 74rem);
+    margin-inline: auto;
+  }
+
+  .home-content-shell {
+    width: min(100%, 89rem);
+    margin-inline: auto;
+  }
+
+  @media (min-width: 1024px) {
+    .nav-shell-floating {
+      width: min(70vw, 74rem);
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .app-shell {
+      width: min(96vw, 100rem);
+    }
+
+    .nav-shell {
+      width: min(97vw, 116rem);
+    }
+
+    .nav-shell-floating {
+      width: min(68vw, 74rem);
+    }
+
+    .home-content-shell {
+      width: min(100%, 94rem);
+    }
+  }
+}
+
 ::selection {
   background: rgba(15, 76, 129, 0.18);
 }

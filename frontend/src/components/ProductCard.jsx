@@ -9,7 +9,7 @@ export const ProductCard = ({ product, onAddToCart, isAdded, compact = false, ad
     return (
       <article className="group flex h-full flex-col overflow-hidden rounded-[20px] border border-[#eadfd3] bg-[#fffdfa] shadow-[0_10px_30px_rgba(39,29,17,0.08)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_16px_34px_rgba(39,29,17,0.12)]">
         <Link to={`/products/${product.id}`} className="block">
-          <div className="relative h-36 overflow-hidden bg-[#f5efe7]">
+          <div className="relative h-[clamp(8.5rem,10vw,9.5rem)] overflow-hidden bg-[#f5efe7]">
             <img
               src={product.image_url}
               alt={product.name}
@@ -35,7 +35,7 @@ export const ProductCard = ({ product, onAddToCart, isAdded, compact = false, ad
 
           <Link
             to={`/products/${product.id}`}
-            className="mt-1 line-clamp-2 min-h-[2.25rem] text-[0.92rem] font-medium leading-[1.15rem] text-[#201915]"
+            className="mt-1 line-clamp-2 min-h-[2.25rem] text-[clamp(0.9rem,0.9vw,0.98rem)] font-medium leading-[1.15rem] text-[#201915]"
           >
             {product.name}
           </Link>
@@ -45,7 +45,7 @@ export const ProductCard = ({ product, onAddToCart, isAdded, compact = false, ad
           <div className="mt-auto pt-2">
             <div className="flex items-end justify-between gap-3">
               <div className="min-w-0">
-                <p className="text-[1rem] font-semibold leading-none text-clay">{priceLabel}</p>
+                <p className="text-[clamp(0.98rem,0.95vw,1.06rem)] font-semibold leading-none text-clay">{priceLabel}</p>
                 <p className="mt-1 text-[10px] text-slate-500">{soldLabel}</p>
               </div>
               {canAddToCart ? (
@@ -72,7 +72,7 @@ export const ProductCard = ({ product, onAddToCart, isAdded, compact = false, ad
         <img
           src={product.image_url}
           alt={product.name}
-          className="h-60 w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+          className="h-[clamp(13.5rem,18vw,15rem)] w-full object-cover transition duration-500 group-hover:scale-[1.03]"
         />
         <div className="absolute left-4 top-4 rounded-full bg-white/88 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-ink">
           {product.category_name || "General"}
@@ -92,13 +92,13 @@ export const ProductCard = ({ product, onAddToCart, isAdded, compact = false, ad
           </Link>
         ) : null}
 
-        <h3 className="mt-3 font-display text-[1.65rem] leading-tight text-ink">{product.name}</h3>
+        <h3 className="mt-3 font-display text-[clamp(1.4rem,1.55vw,1.7rem)] leading-tight text-ink">{product.name}</h3>
         <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-600">{product.description}</p>
 
         <div className="mt-auto pt-4">
           <div className="flex items-end justify-between gap-4">
             <div className="flex min-w-0 flex-1 items-end justify-between gap-3">
-              <span className="text-[1.7rem] font-semibold text-clay">{priceLabel}</span>
+              <span className="text-[clamp(1.45rem,1.6vw,1.8rem)] font-semibold text-clay">{priceLabel}</span>
               <p className="shrink-0 text-[13px] text-slate-500">{reviewLabel}</p>
             </div>
             {product.stock <= 5 ? (
