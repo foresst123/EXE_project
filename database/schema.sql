@@ -1,7 +1,5 @@
 SELECT 'CREATE DATABASE exe_store'
-WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'exe_store')\gexec
 
-\c exe_store;
 
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
