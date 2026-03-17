@@ -4,6 +4,7 @@ import { api } from "../api/client";
 import { ErrorMessage } from "../components/ErrorMessage";
 import { Loader } from "../components/Loader";
 import { StatusBadge } from "../components/StatusBadge";
+import { useCart } from "../context/CartContext";
 
 export const CheckoutResultPage = () => {
   const [params] = useSearchParams();
@@ -12,6 +13,7 @@ export const CheckoutResultPage = () => {
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const { refreshCart } = useCart();
 
   useEffect(() => {
     const loadOrder = async () => {
@@ -23,9 +25,13 @@ export const CheckoutResultPage = () => {
       try {
         if (status === "success") {
           await api.post(`/orders/${orderId}/confirm-payment`);
+          await refreshCart();
         }
         const { data } = await api.get(`/orders/${orderId}`);
         setOrder(data);
+        if (data?.payment_status === "paid") {
+          await refreshCart();
+        }
       } catch (err) {
         setError(err.response?.data?.message || "Could not load order");
       } finally {
