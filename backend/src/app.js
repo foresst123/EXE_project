@@ -14,20 +14,9 @@ import { asyncHandler } from "./utils/asyncHandler.js";
 
 const app = express();
 
-const allowedOrigins = new Set([
-  env.clientUrl,
-  ...env.clientUrls,
-  "http://localhost:5173",
-]);
-
 app.use(
   cors({
-    origin(origin, callback) {
-      if (!origin || allowedOrigins.has(origin)) {
-        return callback(null, true);
-      }
-      return callback(new Error("CORS origin not allowed"));
-    },
+    origin: env.clientUrl,
     credentials: true,
   }),
 );
