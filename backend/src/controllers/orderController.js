@@ -1,4 +1,5 @@
 import {
+  confirmOrderPayment,
   createCheckoutSession,
   getOrderById,
   getOrders,
@@ -30,4 +31,9 @@ export const stripeWebhookHandler = async (req, res) => {
   const signature = req.headers["stripe-signature"];
   const result = await handleStripeWebhook(signature, req.body);
   res.json(result);
+};
+
+export const confirmOrderPaymentHandler = async (req, res) => {
+  const order = await confirmOrderPayment(req.params.id, req.user);
+  res.json(order);
 };

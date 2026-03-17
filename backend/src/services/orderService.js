@@ -160,6 +160,110 @@ export const updateOrderStatus = async (id, status) => {
   };
 };
 
+const finalizePaidOrder = async (client, order, paymentIntentId) => {
+  const itemResult = await client.query(
+    `SELECT oi.product_id, oi.quantity, p.name, p.stock
+     FROM order_items oi
+     JOIN products p ON p.id = oi.product_id
+     WHERE oi.order_id = $1
+     FOR UPDATE OF p`,
+    [order.id],
+  );
+
+  for (const item of itemResult.rows) {
+    if (item.quantity > item.stock) {
+      await client.query(
+        `UPDATE orders
+         SET payment_status = 'failed', status = 'payment_failed'
+         WHERE id = $1`,
+        [order.id],
+      );
+      return { received: true, stockFailure: item.name };
+    }
+  }
+
+  for (const item of itemResult.rows) {
+    await client.query("UPDATE products SET stock = stock - $1 WHERE id = $2", [
+      item.quantity,
+      item.product_id,
+    ]);
+  }
+
+  await client.query(
+    `DELETE FROM cart_items
+     WHERE user_id = $1
+     AND product_id IN (SELECT product_id FROM order_items WHERE order_id = $2)`,
+    [order.user_id, order.id],
+  );
+
+  await client.query(
+    `UPDATE orders
+     SET payment_status = 'paid',
+         status = 'processing',
+         paid_at = NOW(),
+         payment_intent_id = $1
+     WHERE id = $2`,
+    [paymentIntentId || null, order.id],
+  );
+
+  return { received: true, orderId: order.id };
+};
+
+export const confirmOrderPayment = async (id, user) => {
+  const stripe = getStripeClient();
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    const orderResult = await client.query(
+      `SELECT *
+       FROM orders
+       WHERE id = $1
+       FOR UPDATE`,
+      [id],
+    );
+    const order = orderResult.rows[0];
+
+    if (!order) {
+      throw new AppError("Order not found", 404);
+    }
+
+    if (user.role !== "admin" && order.user_id !== user.id) {
+      throw new AppError("Access denied", 403);
+    }
+
+    if (order.payment_status === "paid") {
+      await client.query("COMMIT");
+      return getOrderWithItems(order.id);
+    }
+
+    if (!order.stripe_session_id) {
+      throw new AppError("No Stripe session found for this order", 400);
+    }
+
+    const session = await stripe.checkout.sessions.retrieve(order.stripe_session_id);
+    const paid =
+      session.payment_status === "paid" ||
+      session.status === "complete" ||
+      session.payment_status === "no_payment_required";
+
+    if (!paid) {
+      await client.query("COMMIT");
+      return getOrderWithItems(order.id);
+    }
+
+    await finalizePaidOrder(client, order, session.payment_intent);
+    await client.query("COMMIT");
+    return getOrderWithItems(order.id);
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
+};
+
 export const handleStripeWebhook = async (signature, rawBody) => {
   if (!env.stripeWebhookSecret) {
     throw new AppError("Stripe webhook secret is not configured", 500);
@@ -207,54 +311,10 @@ export const handleStripeWebhook = async (signature, rawBody) => {
       return { received: true, alreadyProcessed: true };
     }
 
-    const itemResult = await client.query(
-      `SELECT oi.product_id, oi.quantity, p.name, p.stock
-       FROM order_items oi
-       JOIN products p ON p.id = oi.product_id
-       WHERE oi.order_id = $1
-       FOR UPDATE OF p`,
-      [order.id],
-    );
-
-    for (const item of itemResult.rows) {
-      if (item.quantity > item.stock) {
-        await client.query(
-          `UPDATE orders
-           SET payment_status = 'failed', status = 'payment_failed'
-           WHERE id = $1`,
-          [order.id],
-        );
-        await client.query("COMMIT");
-        return { received: true, stockFailure: item.name };
-      }
-    }
-
-    for (const item of itemResult.rows) {
-      await client.query("UPDATE products SET stock = stock - $1 WHERE id = $2", [
-        item.quantity,
-        item.product_id,
-      ]);
-    }
-
-    await client.query(
-      `DELETE FROM cart_items
-       WHERE user_id = $1
-       AND product_id IN (SELECT product_id FROM order_items WHERE order_id = $2)`,
-      [order.user_id, order.id],
-    );
-
-    await client.query(
-      `UPDATE orders
-       SET payment_status = 'paid',
-           status = 'processing',
-           paid_at = NOW(),
-           payment_intent_id = $1
-       WHERE id = $2`,
-      [session.payment_intent, order.id],
-    );
+    const result = await finalizePaidOrder(client, order, session.payment_intent);
 
     await client.query("COMMIT");
-    return { received: true, orderId: order.id };
+    return result;
   } catch (error) {
     await client.query("ROLLBACK");
     throw error;

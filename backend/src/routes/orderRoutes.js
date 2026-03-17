@@ -1,6 +1,7 @@
 import express from "express";
 import { body } from "express-validator";
 import {
+  confirmOrderPaymentHandler,
   createCheckoutSessionHandler,
   getOrderHandler,
   getOrdersHandler,
@@ -15,6 +16,7 @@ const router = express.Router();
 router.use(protect);
 
 router.post("/checkout-session", asyncHandler(createCheckoutSessionHandler));
+router.post("/:id/confirm-payment", asyncHandler(confirmOrderPaymentHandler));
 router.get("/", asyncHandler(getOrdersHandler));
 router.get("/:id", asyncHandler(getOrderHandler));
 router.patch(

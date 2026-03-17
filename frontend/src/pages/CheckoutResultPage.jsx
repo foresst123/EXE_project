@@ -21,6 +21,9 @@ export const CheckoutResultPage = () => {
       }
 
       try {
+        if (status === "success") {
+          await api.post(`/orders/${orderId}/confirm-payment`);
+        }
         const { data } = await api.get(`/orders/${orderId}`);
         setOrder(data);
       } catch (err) {
@@ -31,7 +34,7 @@ export const CheckoutResultPage = () => {
     };
 
     loadOrder();
-  }, [orderId]);
+  }, [orderId, status]);
 
   if (loading) {
     return <Loader label="Checking payment result..." />;
