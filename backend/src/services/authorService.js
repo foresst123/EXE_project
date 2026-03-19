@@ -35,7 +35,7 @@ export const getAuthorBySlug = async (slug) => {
   const author = authorResult.rows[0];
 
   if (!author) {
-    throw new AppError("Author not found", 404);
+    throw new AppError("Không tìm thấy nhà thiết kế", 404);
   }
 
   const productResult = await query(
@@ -85,7 +85,7 @@ export const updateAuthor = async (id, payload) => {
   const current = await query("SELECT * FROM authors WHERE id = $1", [id]);
 
   if (!current.rows[0]) {
-    throw new AppError("Author not found", 404);
+    throw new AppError("Không tìm thấy nhà thiết kế", 404);
   }
 
   const nextValue = {
@@ -116,7 +116,7 @@ export const deleteAuthor = async (id) => {
   const result = await query("DELETE FROM authors WHERE id = $1 RETURNING id", [id]);
 
   if (!result.rows[0]) {
-    throw new AppError("Author not found", 404);
+    throw new AppError("Không tìm thấy nhà thiết kế", 404);
   }
 
   return { success: true };

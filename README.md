@@ -1,15 +1,15 @@
-# EXE Project
+# Artdict
 
-Full-stack e-commerce web application built from the local `AGENT.md` requirements.
+Ứng dụng fullstack cho dự án Artdict: nền tảng kết hợp `portfolio + marketplace + community` dành cho designer sinh viên.
 
-## Stack
+## Công nghệ
 
 - Frontend: React, Vite, TailwindCSS, Axios, React Router
 - Backend: Node.js, Express, PostgreSQL, JWT, bcrypt
-- Payments: Stripe Checkout + webhook confirmation
-- Dev tooling: Docker, ESLint, Prettier
+- Thanh toán: Stripe Checkout + webhook xác nhận đơn
+- Dữ liệu mẫu: PostgreSQL schema + seed theo đúng ngữ cảnh Artdict
 
-## Project structure
+## Cấu trúc thư mục
 
 ```text
 .
@@ -18,56 +18,54 @@ Full-stack e-commerce web application built from the local `AGENT.md` requiremen
 └── frontend
 ```
 
-## Quick start
+## Tài khoản mẫu
 
-### 1. Start PostgreSQL
+- Quản trị: `admin@artdict.vn` / `Admin@123`
+- Khách hàng: `linh@artdict.vn` / `User@1234`
 
-You can use your local PostgreSQL instance or Docker:
+## Chạy nhanh với Docker
+
+### 1. Khởi động PostgreSQL
 
 ```bash
 docker compose up -d db
 ```
 
-### 2. Configure environment variables
+### 2. Cấu hình biến môi trường
 
 ```bash
 cp backend/.env.example backend/.env
 cp frontend/.env.example frontend/.env
 ```
 
-Stripe setup in `backend/.env`:
+Nếu bạn chạy DB local bằng Docker, sửa `DATABASE_URL` trong `backend/.env` thành:
 
-```bash
-STRIPE_SECRET_KEY=sk_test_...
-STRIPE_WEBHOOK_SECRET=whsec_...
-SERVER_URL=http://localhost:5050
-CLIENT_URL=http://localhost:5173
+```env
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/artdict_db
 ```
 
-### 3. Create schema and seed data
-
-Using Docker (recommended, no local `psql` needed):
+### 3. Tạo schema DB
 
 ```bash
-docker compose exec -T db psql -U postgres -f /database/schema.sql
-docker compose exec -T db psql -U postgres -d eartdict_db -f /database/seed.sql
+docker compose exec -T db psql -U postgres -d artdict_db -f /database/schema.sql
 ```
 
-Using local PostgreSQL:
+### 4. Nạp lại dữ liệu mẫu Artdict
+
+Lưu ý: lệnh seed sẽ `TRUNCATE` toàn bộ dữ liệu mẫu hiện có trước khi nạp lại dữ liệu mới.
 
 ```bash
-psql -U postgres -f database/schema.sql
-psql -U postgres -d exe_store -f database/seed.sql
+docker compose exec -T db psql -U postgres -d artdict_db -f /database/seed.sql
 ```
 
-### 4. Install dependencies
+### 5. Cài dependencies
 
 ```bash
 cd backend && npm install
 cd ../frontend && npm install
 ```
 
-### 5. Run the apps
+### 6. Chạy backend và frontend
 
 Backend:
 
@@ -81,41 +79,40 @@ Frontend:
 cd frontend && npm run dev
 ```
 
-### 6. Forward Stripe webhook locally
+## Chạy với PostgreSQL local hoặc Supabase
+
+Nếu bạn không dùng Docker, chỉ cần chạy 2 file SQL vào đúng database mà `DATABASE_URL` đang trỏ tới:
 
 ```bash
-stripe listen --forward-to localhost:5050/api/orders/webhook
+psql "postgresql://USER:PASSWORD@HOST:5432/DB_NAME" -f database/schema.sql
+psql "postgresql://USER:PASSWORD@HOST:5432/DB_NAME" -f database/seed.sql
 ```
 
-## Demo accounts
+## Hướng dẫn sửa DB khi dữ liệu bị lệch
 
-- Admin: `admin@example.com` / `Admin@123`
-- User: `john@example.com` / `User@1234`
+Khi bạn muốn làm sạch dữ liệu cũ và nạp lại đúng dữ liệu Artdict:
 
-## API overview
+1. Dừng backend nếu đang chạy.
+2. Chạy lại `schema.sql` để đảm bảo bảng/cột mới nhất đã có.
+3. Chạy `seed.sql` để xóa dữ liệu mẫu cũ và nạp lại dữ liệu mới.
+4. Khởi động lại backend.
 
-- `POST /api/auth/register`
-- `POST /api/auth/login`
-- `GET /api/products`
-- `GET /api/products/:id`
-- `GET /api/authors`
-- `GET /api/authors/:slug`
-- `POST /api/products`
-- `PUT /api/products/:id`
-- `DELETE /api/products/:id`
-- `GET /api/cart`
-- `POST /api/cart/add`
-- `DELETE /api/cart/remove`
-- `POST /api/orders/checkout-session`
-- `GET /api/orders`
-- `GET /api/orders/:id`
-- `PATCH /api/orders/:id/status`
-- `POST /api/orders/webhook`
-- `GET /api/users`
-- `PATCH /api/users/:id/role`
+Với Docker:
 
-## Notes
+```bash
+docker compose exec -T db psql -U postgres -d artdict_db -f /database/schema.sql
+docker compose exec -T db psql -U postgres -d artdict_db -f /database/seed.sql
+```
 
-- Backend uses a clean-ish layered structure: `routes -> controllers -> services`.
-- Pagination, category filtering, author filtering, author profile pages, sold-count display, Stripe card checkout, webhook-driven order payment confirmation, chatbot widget, and a sidebar-based admin dashboard are included.
-- This repo is scaffolded manually, so run `npm install` before starting the project.
+Với DB remote:
+
+```bash
+psql "$DATABASE_URL" -f database/schema.sql
+psql "$DATABASE_URL" -f database/seed.sql
+```
+
+## Ghi chú
+
+- `backend/src/config/runMigrations.js` hiện đọc trực tiếp `database/schema.sql`, nên khi backend khởi động nó sẽ luôn áp lại schema mới nhất.
+- Seed mới đã đổi dữ liệu sang tiếng Việt, dùng giá VND và có sẵn sản phẩm, sự kiện, đơn hàng, đánh giá mẫu đúng ngữ cảnh Artdict.
+- Stripe đang được cấu hình theo `VND`, nên giá trong DB và giao diện đã đồng bộ với thị trường Việt Nam.

@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
+import { formatCurrency } from "../utils/formatters";
 
 export const ProductCard = ({ product, onAddToCart, isAdded, compact = false, addKey, canAddToCart = true }) => {
-  const priceLabel = `$${Number(product.price).toFixed(2)}`;
-  const soldLabel = `Sold ${product.sold_count || 0}`;
-  const reviewLabel = product.comment_count ? `${product.comment_count} reviews` : "New in the catalog";
+  const priceLabel = formatCurrency(product.price);
+  const soldLabel = `Đã bán ${product.sold_count || 0}`;
+  const reviewLabel = product.comment_count ? `${product.comment_count} đánh giá` : "Mới lên kệ";
 
   if (compact) {
     return (
@@ -16,11 +17,11 @@ export const ProductCard = ({ product, onAddToCart, isAdded, compact = false, ad
               className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
             />
             <div className="absolute left-2 top-2 max-w-[70%] truncate rounded-md bg-[#fff2ea] px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-clay">
-              {product.category_name || "General"}
+              {product.category_name || "Chung"}
             </div>
             {product.stock <= 5 ? (
               <div className="absolute right-2 top-2 rounded-md bg-[#111827]/84 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-white">
-                Only {product.stock}
+                Còn {product.stock}
               </div>
             ) : null}
           </div>
@@ -29,7 +30,7 @@ export const ProductCard = ({ product, onAddToCart, isAdded, compact = false, ad
         <div className="flex flex-1 flex-col px-2.5 pb-2 pt-1.5">
           {product.author_name ? (
             <p className="text-[9px] font-semibold uppercase tracking-[0.16em] text-tide">
-              By {product.author_name}
+              Bởi {product.author_name}
             </p>
           ) : null}
 
@@ -56,7 +57,7 @@ export const ProductCard = ({ product, onAddToCart, isAdded, compact = false, ad
                     isAdded ? "bg-moss text-white" : "bg-ink text-white"
                   }`}
                 >
-                  {isAdded ? "Added" : "Add"}
+                  {isAdded ? "Đã thêm" : "Thêm"}
                 </button>
               ) : null}
             </div>
@@ -75,7 +76,7 @@ export const ProductCard = ({ product, onAddToCart, isAdded, compact = false, ad
           className="h-[clamp(13.5rem,18vw,15rem)] w-full object-cover transition duration-500 group-hover:scale-[1.03]"
         />
         <div className="absolute left-4 top-4 rounded-full bg-white/88 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-ink">
-          {product.category_name || "General"}
+          {product.category_name || "Chung"}
         </div>
         <div className="absolute right-4 top-4 rounded-full bg-[#111827]/82 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white">
           {soldLabel}
@@ -88,7 +89,7 @@ export const ProductCard = ({ product, onAddToCart, isAdded, compact = false, ad
             to={`/artists/${product.author_slug}`}
             className="inline-flex w-fit rounded-full bg-[#edf5fd] px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-tide"
           >
-            By {product.author_name}
+            Bởi {product.author_name}
           </Link>
         ) : null}
 
@@ -103,7 +104,7 @@ export const ProductCard = ({ product, onAddToCart, isAdded, compact = false, ad
             </div>
             {product.stock <= 5 ? (
               <span className="rounded-full bg-[#fff1e7] px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-clay">
-                Only {product.stock} left
+                Chỉ còn {product.stock}
               </span>
             ) : null}
           </div>
@@ -113,7 +114,7 @@ export const ProductCard = ({ product, onAddToCart, isAdded, compact = false, ad
               to={`/products/${product.id}`}
               className="flex-1 rounded-full border border-mist bg-white px-4 py-2.5 text-center text-sm font-medium text-ink"
             >
-              View detail
+              Xem chi tiết
             </Link>
             {canAddToCart ? (
               <button
@@ -123,7 +124,7 @@ export const ProductCard = ({ product, onAddToCart, isAdded, compact = false, ad
                   isAdded ? "bg-moss" : "bg-ink"
                 }`}
               >
-                {isAdded ? "Added to cart" : "Add to cart"}
+                {isAdded ? "Đã thêm vào giỏ" : "Thêm vào giỏ"}
               </button>
             ) : null}
           </div>

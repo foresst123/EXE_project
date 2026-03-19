@@ -3,34 +3,31 @@ import { Link } from "react-router-dom";
 import { api } from "../api/client";
 import { ErrorMessage } from "../components/ErrorMessage";
 import { useAuth } from "../context/AuthContext";
+import { formatShortDate } from "../utils/formatters";
 
 const formatDate = (value) => {
   if (!value) {
-    return "Not set yet";
+    return "Chưa cập nhật";
   }
 
-  return new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  }).format(new Date(value));
+  return formatShortDate(value);
 };
 
 const methodOptions = [
   {
     value: "email",
-    title: "Email verification",
-    description: "Receive verification and sign-in prompts through your inbox.",
+    title: "Xác minh qua email",
+    description: "Nhận thông báo xác minh và đăng nhập thông qua hộp thư.",
   },
   {
     value: "authenticator",
-    title: "Authenticator app",
-    description: "Use a time-based code from your preferred authenticator app.",
+    title: "Ứng dụng xác thực",
+    description: "Sử dụng mã thời gian từ ứng dụng xác thực bạn tin dùng.",
   },
   {
     value: "backup_codes",
-    title: "Backup codes",
-    description: "Keep recovery codes ready for sign-ins on trusted devices.",
+    title: "Mã dự phòng",
+    description: "Giữ sẵn mã khôi phục để đăng nhập trên thiết bị tin cậy.",
   },
 ];
 
@@ -87,7 +84,7 @@ export const AccountPage = () => {
           setAuthMethod(currentUser.preferred_auth_method || "email");
         }
       } catch (requestError) {
-        setError(requestError.response?.data?.message || "Failed to load your account");
+        setError(requestError.response?.data?.message || "Không thể tải thông tin tài khoản");
       } finally {
         setLoading(false);
       }
@@ -121,9 +118,9 @@ export const AccountPage = () => {
 
     try {
       const { data } = await api.patch("/users/me/profile", profileForm);
-      withNotice("Profile details updated.", data);
+      withNotice("Đã cập nhật thông tin cá nhân.", data);
     } catch (requestError) {
-      setError(requestError.response?.data?.message || "Failed to update your profile");
+      setError(requestError.response?.data?.message || "Không thể cập nhật hồ sơ");
     } finally {
       setSavingSection("");
     }
@@ -135,10 +132,10 @@ export const AccountPage = () => {
 
     try {
       const { data } = await api.patch("/users/me/email", emailForm);
-      withNotice("Email updated. Please verify the new address from your inbox.", data);
+      withNotice("Đã cập nhật email. Vui lòng kiểm tra hộp thư để xác minh địa chỉ mới.", data);
       setEmailForm((prev) => ({ ...prev, current_password: "" }));
     } catch (requestError) {
-      setError(requestError.response?.data?.message || "Failed to update your email");
+      setError(requestError.response?.data?.message || "Không thể cập nhật email");
     } finally {
       setSavingSection("");
     }
@@ -148,7 +145,7 @@ export const AccountPage = () => {
     event.preventDefault();
 
     if (passwordForm.new_password !== passwordForm.confirm_password) {
-      setError("Password confirmation does not match.");
+      setError("Mật khẩu xác nhận không khớp.");
       return;
     }
 
@@ -159,14 +156,14 @@ export const AccountPage = () => {
         current_password: passwordForm.current_password,
         new_password: passwordForm.new_password,
       });
-      withNotice("Password changed successfully.", data);
+      withNotice("Đổi mật khẩu thành công.", data);
       setPasswordForm({
         current_password: "",
         new_password: "",
         confirm_password: "",
       });
     } catch (requestError) {
-      setError(requestError.response?.data?.message || "Failed to change password");
+      setError(requestError.response?.data?.message || "Không thể đổi mật khẩu");
     } finally {
       setSavingSection("");
     }
@@ -181,10 +178,10 @@ export const AccountPage = () => {
       const { data } = await api.patch("/users/me/security", {
         preferred_auth_method: nextMethod,
       });
-      withNotice("Verification method updated.", data);
+      withNotice("Đã cập nhật phương thức xác minh.", data);
     } catch (requestError) {
       setAuthMethod(previousMethod || "email");
-      setError(requestError.response?.data?.message || "Failed to update verification method");
+      setError(requestError.response?.data?.message || "Không thể cập nhật phương thức xác minh");
     } finally {
       setSavingSection("");
     }
@@ -197,14 +194,14 @@ export const AccountPage = () => {
       const { data } = await api.post("/users/me/email-verification");
       withNotice(data.message, data.user);
     } catch (requestError) {
-      setError(requestError.response?.data?.message || "Failed to send verification email");
+      setError(requestError.response?.data?.message || "Không thể gửi email xác minh");
     } finally {
       setSavingSection("");
     }
   };
 
   if (loading) {
-    return <div className="py-20 text-center text-slate-500">Loading your account...</div>;
+    return <div className="py-20 text-center text-slate-500">Đang tải tài khoản của bạn...</div>;
   }
 
   return (
@@ -228,7 +225,7 @@ export const AccountPage = () => {
             className="inline-flex items-center gap-2 rounded-full border border-[#e6d8ca] bg-[#fffaf5] px-4 py-2.5 text-sm font-semibold text-[#342923] transition hover:border-[#d14d1f] hover:text-[#d14d1f]"
           >
             <ArrowLeftIcon />
-            <span>Back to home</span>
+            <span>Về trang chủ</span>
           </Link>
         </div>
       </header>
@@ -242,7 +239,7 @@ export const AccountPage = () => {
               ) : null}
             </div>
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-tide">My account</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-tide">Tài khoản của tôi</p>
               <h1 className="mt-2 font-display text-[2.2rem] text-ink">{account.name}</h1>
               <p className="mt-1 text-sm text-slate-500">{account.email}</p>
             </div>
@@ -250,31 +247,31 @@ export const AccountPage = () => {
 
           <div className="grid gap-3 rounded-[24px] bg-white p-4">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-slate-500">Email status</span>
+              <span className="text-sm font-medium text-slate-500">Trạng thái email</span>
               <span className={`rounded-full px-3 py-1 text-xs font-semibold ${account.email_verified ? "bg-[#e8f6ef] text-[#227a52]" : "bg-[#fff1e8] text-[#d14d1f]"}`}>
-                {account.email_verified ? "Verified" : "Pending"}
+                {account.email_verified ? "Đã xác minh" : "Chờ xác minh"}
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-slate-500">Verification method</span>
+              <span className="text-sm font-medium text-slate-500">Phương thức xác minh</span>
               <span className="text-sm font-semibold text-ink">
-                {methodOptions.find((item) => item.value === account.preferred_auth_method)?.title || "Email verification"}
+                {methodOptions.find((item) => item.value === account.preferred_auth_method)?.title || "Xác minh qua email"}
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-slate-500">Member since</span>
+              <span className="text-sm font-medium text-slate-500">Tham gia từ</span>
               <span className="text-sm font-semibold text-ink">{formatDate(account.created_at)}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-slate-500">Password updated</span>
+              <span className="text-sm font-medium text-slate-500">Cập nhật mật khẩu</span>
               <span className="text-sm font-semibold text-ink">{formatDate(account.password_changed_at)}</span>
             </div>
           </div>
 
           <div className="rounded-[24px] bg-[#121c2e] p-5 text-white">
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-white/60">Security note</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-white/60">Ghi chú bảo mật</p>
             <p className="mt-3 text-sm leading-7 text-white/85">
-              Keep your contact email active. Verification requests and future account notices will be sent there first.
+              Hãy giữ email liên hệ luôn hoạt động. Các yêu cầu xác minh và thông báo quan trọng sẽ được gửi tới đó trước tiên.
             </p>
           </div>
         </aside>
@@ -290,14 +287,14 @@ export const AccountPage = () => {
           <section className="rounded-[32px] border border-[#eadfd3] bg-white p-6 shadow-[0_18px_50px_rgba(29,23,18,0.06)]">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.24em] text-tide">Profile</p>
-                <h2 className="mt-2 text-[1.85rem] font-semibold text-ink md:text-[2rem]">Personal information</h2>
+                <p className="text-sm font-semibold uppercase tracking-[0.24em] text-tide">Hồ sơ</p>
+                <h2 className="mt-2 text-[1.85rem] font-semibold text-ink md:text-[2rem]">Thông tin cá nhân</h2>
               </div>
             </div>
 
             <form onSubmit={saveProfile} className="mt-6 grid gap-5 md:grid-cols-2">
               <label className="space-y-2">
-                <span className="text-sm font-semibold text-slate-600">Full name</span>
+                <span className="text-sm font-semibold text-slate-600">Họ và tên</span>
                 <input
                   className="w-full rounded-[18px] border border-[#e5d8cb] px-4 py-3 outline-none transition focus:border-[#d14d1f]"
                   value={profileForm.name}
@@ -305,7 +302,7 @@ export const AccountPage = () => {
                 />
               </label>
               <label className="space-y-2">
-                <span className="text-sm font-semibold text-slate-600">Phone</span>
+                <span className="text-sm font-semibold text-slate-600">Số điện thoại</span>
                 <input
                   className="w-full rounded-[18px] border border-[#e5d8cb] px-4 py-3 outline-none transition focus:border-[#d14d1f]"
                   value={profileForm.phone}
@@ -313,7 +310,7 @@ export const AccountPage = () => {
                 />
               </label>
               <label className="space-y-2">
-                <span className="text-sm font-semibold text-slate-600">Location</span>
+                <span className="text-sm font-semibold text-slate-600">Địa điểm</span>
                 <input
                   className="w-full rounded-[18px] border border-[#e5d8cb] px-4 py-3 outline-none transition focus:border-[#d14d1f]"
                   value={profileForm.location}
@@ -321,7 +318,7 @@ export const AccountPage = () => {
                 />
               </label>
               <label className="space-y-2">
-                <span className="text-sm font-semibold text-slate-600">Avatar URL</span>
+                <span className="text-sm font-semibold text-slate-600">Liên kết ảnh đại diện</span>
                 <input
                   className="w-full rounded-[18px] border border-[#e5d8cb] px-4 py-3 outline-none transition focus:border-[#d14d1f]"
                   value={profileForm.avatar_url}
@@ -329,7 +326,7 @@ export const AccountPage = () => {
                 />
               </label>
               <label className="space-y-2 md:col-span-2">
-                <span className="text-sm font-semibold text-slate-600">Bio</span>
+                <span className="text-sm font-semibold text-slate-600">Giới thiệu ngắn</span>
                 <textarea
                   rows={4}
                   className="w-full rounded-[18px] border border-[#e5d8cb] px-4 py-3 outline-none transition focus:border-[#d14d1f]"
@@ -343,7 +340,7 @@ export const AccountPage = () => {
                   disabled={savingSection === "profile"}
                   className="rounded-full bg-clay px-6 py-3 text-sm font-semibold text-white disabled:opacity-60"
                 >
-                  {savingSection === "profile" ? "Saving..." : "Save profile"}
+                  {savingSection === "profile" ? "Đang lưu..." : "Lưu hồ sơ"}
                 </button>
               </div>
             </form>
@@ -352,10 +349,10 @@ export const AccountPage = () => {
           <section className="grid gap-6 xl:grid-cols-2">
             <div className="rounded-[32px] border border-[#eadfd3] bg-white p-6 shadow-[0_18px_50px_rgba(29,23,18,0.06)]">
               <p className="text-sm font-semibold uppercase tracking-[0.24em] text-tide">Email</p>
-              <h2 className="mt-2 text-2xl font-semibold text-ink">Change contact email</h2>
+              <h2 className="mt-2 text-2xl font-semibold text-ink">Đổi email liên hệ</h2>
               <form onSubmit={saveEmail} className="mt-6 space-y-4">
                 <label className="space-y-2">
-                  <span className="text-sm font-semibold text-slate-600">Email address</span>
+                  <span className="text-sm font-semibold text-slate-600">Địa chỉ email</span>
                   <input
                     type="email"
                     className="w-full rounded-[18px] border border-[#e5d8cb] px-4 py-3 outline-none transition focus:border-[#d14d1f]"
@@ -364,7 +361,7 @@ export const AccountPage = () => {
                   />
                 </label>
                 <label className="space-y-2">
-                  <span className="text-sm font-semibold text-slate-600">Current password</span>
+                  <span className="text-sm font-semibold text-slate-600">Mật khẩu hiện tại</span>
                   <input
                     type="password"
                     className="w-full rounded-[18px] border border-[#e5d8cb] px-4 py-3 outline-none transition focus:border-[#d14d1f]"
@@ -377,17 +374,17 @@ export const AccountPage = () => {
                   disabled={savingSection === "email"}
                   className="rounded-full bg-[#1b2940] px-6 py-3 text-sm font-semibold text-white disabled:opacity-60"
                 >
-                  {savingSection === "email" ? "Updating..." : "Update email"}
+                  {savingSection === "email" ? "Đang cập nhật..." : "Cập nhật email"}
                 </button>
               </form>
             </div>
 
             <div className="rounded-[32px] border border-[#eadfd3] bg-white p-6 shadow-[0_18px_50px_rgba(29,23,18,0.06)]">
-              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-tide">Password</p>
-              <h2 className="mt-2 text-2xl font-semibold text-ink">Change password</h2>
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-tide">Mật khẩu</p>
+              <h2 className="mt-2 text-2xl font-semibold text-ink">Đổi mật khẩu</h2>
               <form onSubmit={savePassword} className="mt-6 space-y-4">
                 <label className="space-y-2">
-                  <span className="text-sm font-semibold text-slate-600">Current password</span>
+                  <span className="text-sm font-semibold text-slate-600">Mật khẩu hiện tại</span>
                   <input
                     type="password"
                     className="w-full rounded-[18px] border border-[#e5d8cb] px-4 py-3 outline-none transition focus:border-[#d14d1f]"
@@ -396,7 +393,7 @@ export const AccountPage = () => {
                   />
                 </label>
                 <label className="space-y-2">
-                  <span className="text-sm font-semibold text-slate-600">New password</span>
+                  <span className="text-sm font-semibold text-slate-600">Mật khẩu mới</span>
                   <input
                     type="password"
                     className="w-full rounded-[18px] border border-[#e5d8cb] px-4 py-3 outline-none transition focus:border-[#d14d1f]"
@@ -405,7 +402,7 @@ export const AccountPage = () => {
                   />
                 </label>
                 <label className="space-y-2">
-                  <span className="text-sm font-semibold text-slate-600">Confirm new password</span>
+                  <span className="text-sm font-semibold text-slate-600">Xác nhận mật khẩu mới</span>
                   <input
                     type="password"
                     className="w-full rounded-[18px] border border-[#e5d8cb] px-4 py-3 outline-none transition focus:border-[#d14d1f]"
@@ -418,26 +415,26 @@ export const AccountPage = () => {
                   disabled={savingSection === "password"}
                   className="rounded-full bg-[#1b2940] px-6 py-3 text-sm font-semibold text-white disabled:opacity-60"
                 >
-                  {savingSection === "password" ? "Updating..." : "Update password"}
+                  {savingSection === "password" ? "Đang cập nhật..." : "Cập nhật mật khẩu"}
                 </button>
               </form>
             </div>
           </section>
 
           <section className="rounded-[32px] border border-[#eadfd3] bg-white p-6 shadow-[0_18px_50px_rgba(29,23,18,0.06)]">
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-tide">Verification</p>
-            <h2 className="mt-2 text-[1.85rem] font-semibold text-ink md:text-[2rem]">Email and sign-in security</h2>
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-tide">Xác minh</p>
+            <h2 className="mt-2 text-[1.85rem] font-semibold text-ink md:text-[2rem]">Bảo mật email và đăng nhập</h2>
             <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
               <div className="space-y-4">
                 <div className="rounded-[24px] bg-[#fbf7f2] p-5">
-                  <p className="text-sm font-semibold text-slate-500">Verification email</p>
+                  <p className="text-sm font-semibold text-slate-500">Email xác minh</p>
                   <p className="mt-2 text-base leading-7 text-slate-600">
                     {account.email_verified
-                      ? "This account is already verified."
-                      : "Send a fresh verification email any time you update your address or want to confirm account ownership."}
+                      ? "Tài khoản này đã được xác minh."
+                      : "Bạn có thể gửi lại email xác minh bất cứ lúc nào sau khi cập nhật địa chỉ hoặc muốn xác nhận quyền sở hữu tài khoản."}
                   </p>
                   <p className="mt-3 text-sm text-slate-500">
-                    Last sent: {formatDate(account.verification_email_sent_at)}
+                    Gửi gần nhất: {formatDate(account.verification_email_sent_at)}
                   </p>
                   <button
                     type="button"
@@ -445,7 +442,7 @@ export const AccountPage = () => {
                     disabled={savingSection === "verification"}
                     className="mt-5 rounded-full border border-[#d14d1f] px-5 py-2.5 text-sm font-semibold text-[#d14d1f] disabled:opacity-60"
                   >
-                    {savingSection === "verification" ? "Sending..." : "Send verification email"}
+                    {savingSection === "verification" ? "Đang gửi..." : "Gửi email xác minh"}
                   </button>
                 </div>
               </div>

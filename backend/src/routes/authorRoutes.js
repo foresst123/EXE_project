@@ -20,8 +20,8 @@ router.post(
   protect,
   requireAdmin,
   [
-    body("name").trim().notEmpty().withMessage("Artist name is required"),
-    body("avatar_url").optional({ values: "falsy" }).isURL().withMessage("Avatar URL must be valid"),
+    body("name").trim().notEmpty().withMessage("Tên nhà thiết kế là bắt buộc"),
+    body("avatar_url").optional({ values: "falsy" }).isURL().withMessage("Liên kết ảnh đại diện không hợp lệ"),
     validate,
   ],
   asyncHandler(createAuthorHandler),
@@ -31,8 +31,8 @@ router.put(
   protect,
   requireAdmin,
   [
-    body("name").optional().trim().notEmpty().withMessage("Artist name is required"),
-    body("avatar_url").optional({ values: "falsy" }).isURL().withMessage("Avatar URL must be valid"),
+    body("name").optional().trim().notEmpty().withMessage("Tên nhà thiết kế là bắt buộc"),
+    body("avatar_url").optional({ values: "falsy" }).isURL().withMessage("Liên kết ảnh đại diện không hợp lệ"),
     validate,
   ],
   asyncHandler(updateAuthorHandler),

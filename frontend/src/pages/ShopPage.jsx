@@ -97,7 +97,7 @@ export const ShopPage = () => {
       setAuthors(data.authors);
       setPagination(data.pagination);
     } catch (requestError) {
-      setError(requestError.response?.data?.message || "Failed to load products");
+      setError(requestError.response?.data?.message || "Không thể tải danh sách sản phẩm");
     } finally {
       setLoading(false);
     }
@@ -123,17 +123,18 @@ export const ShopPage = () => {
       setRecentlyAddedId(product.id);
       window.setTimeout(() => setRecentlyAddedId(null), 1600);
     } catch (requestError) {
-      setError(requestError.response?.data?.message || "Failed to add to cart");
+      setError(requestError.response?.data?.message || "Không thể thêm vào giỏ hàng");
     }
   };
 
   const activeFilters = useMemo(
     () =>
       [
-        filters.search ? `Search: ${filters.search}` : null,
-        ...filters.category.map((category) => `Category: ${category}`),
+        filters.search ? `Từ khóa: ${filters.search}` : null,
+        ...filters.category.map((category) => `Danh mục: ${category}`),
         ...filters.author.map(
-          (authorSlug) => `Artist: ${authors.find((author) => author.slug === authorSlug)?.name || authorSlug}`,
+          (authorSlug) =>
+            `Nhà thiết kế: ${authors.find((author) => author.slug === authorSlug)?.name || authorSlug}`,
         ),
       ].filter(Boolean),
     [authors, filters.author, filters.category, filters.search],
@@ -195,7 +196,7 @@ export const ShopPage = () => {
                 className="inline-flex items-center gap-2 rounded-full border border-[#e6d8ca] bg-[#fffaf5] px-4 py-2.5 text-sm font-semibold text-[#342923] transition hover:border-[#d14d1f] hover:text-[#d14d1f]"
               >
                 <ArrowLeftIcon />
-                <span>Back to home</span>
+                <span>Về trang chủ</span>
               </Link>
             </div>
           </div>
@@ -207,14 +208,14 @@ export const ShopPage = () => {
               </span>
               <input
                 type="text"
-                placeholder="Search products, artists, or collections..."
+                placeholder="Tìm sản phẩm, nhà thiết kế hoặc bộ sưu tập..."
                 className="w-full bg-transparent text-[1rem] font-medium text-ink outline-none placeholder:text-[#97a1ae]"
                 value={searchInput}
                 onChange={(event) => setSearchInput(event.target.value)}
               />
             </div>
             <button type="submit" className="rounded-full bg-clay px-7 py-3 text-sm font-semibold text-white shadow-[0_10px_24px_rgba(200,93,37,0.22)]">
-              Search
+              Tìm kiếm
             </button>
           </form>
         </div>
@@ -229,13 +230,13 @@ export const ShopPage = () => {
               <span className="text-[#d14d1f]">
                 <FilterIcon />
               </span>
-              <p className="text-[1.25rem] font-semibold text-ink">Search Filters</p>
+              <p className="text-[1.25rem] font-semibold text-ink">Bộ lọc tìm kiếm</p>
             </div>
 
             <div className="space-y-6">
               <div className="border-b border-[#eadfd3] pb-6">
                 <div className="flex items-center justify-between">
-                  <p className="text-[1.05rem] font-semibold text-ink">Keyword</p>
+                  <p className="text-[1.05rem] font-semibold text-ink">Từ khóa</p>
                   {filters.search ? (
                     <button
                       type="button"
@@ -245,23 +246,25 @@ export const ShopPage = () => {
                       }}
                       className="text-sm font-semibold text-[#d14d1f]"
                     >
-                      Clear
+                      Xóa
                     </button>
                   ) : null}
                 </div>
                 <p className="mt-3 text-[0.96rem] leading-7 text-slate-500">
-                  {filters.search ? `Showing results for "${filters.search}"` : "Use the top search bar to narrow the catalog."}
+                  {filters.search
+                    ? `Đang hiển thị kết quả cho "${filters.search}"`
+                    : "Dùng ô tìm kiếm phía trên để thu hẹp danh sách sản phẩm."}
                 </p>
               </div>
 
               <div className="border-b border-[#eadfd3] pb-6">
-                <p className="text-[1.05rem] font-semibold text-ink">Categories</p>
+                <p className="text-[1.05rem] font-semibold text-ink">Danh mục</p>
                 <div className="mt-4 space-y-1">
                   <FilterOption
                     active={filters.category.length === 0}
                     onClick={() => setFilters((prev) => ({ ...prev, category: [], page: 1 }))}
                   >
-                    All categories
+                    Tất cả danh mục
                   </FilterOption>
                   {categories.map((category) => (
                     <FilterOption
@@ -276,13 +279,13 @@ export const ShopPage = () => {
               </div>
 
               <div className="border-b border-[#eadfd3] pb-6">
-                <p className="text-[1.05rem] font-semibold text-ink">Artists</p>
+                <p className="text-[1.05rem] font-semibold text-ink">Nhà thiết kế</p>
                 <div className="mt-4 space-y-1">
                   <FilterOption
                     active={filters.author.length === 0}
                     onClick={() => setFilters((prev) => ({ ...prev, author: [], page: 1 }))}
                   >
-                    All artists
+                    Tất cả designer
                   </FilterOption>
                   {authors.map((author) => (
                     <FilterOption
@@ -297,7 +300,7 @@ export const ShopPage = () => {
               </div>
 
               <div className="space-y-3">
-                <p className="text-[1.05rem] font-semibold text-ink">Quick reset</p>
+                <p className="text-[1.05rem] font-semibold text-ink">Làm mới nhanh</p>
                 <button
                   type="button"
                   onClick={() => {
@@ -306,7 +309,7 @@ export const ShopPage = () => {
                   }}
                   className="rounded-full border border-[#e6d8ca] px-5 py-2.5 text-sm font-semibold text-[#342923] transition hover:border-[#d14d1f] hover:text-[#d14d1f]"
                 >
-                  Clear all filters
+                  Xóa toàn bộ bộ lọc
                 </button>
               </div>
             </div>
@@ -317,13 +320,13 @@ export const ShopPage = () => {
           <div className="border-b border-[#eadfd3] pb-5">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
-                <p className="text-sm uppercase tracking-[0.24em] text-tide">Search results</p>
+                <p className="text-sm uppercase tracking-[0.24em] text-tide">Kết quả tìm kiếm</p>
                 <h2 className="mt-2 text-[1.85rem] font-semibold text-ink md:text-[2rem]">
-                  {activeFilters.length ? "Filtered products" : "All catalog products"}
+                  {activeFilters.length ? "Sản phẩm đã lọc" : "Toàn bộ sản phẩm trên Artdict"}
                 </h2>
               </div>
               <div className="rounded-full border border-[#e7dacd] bg-[#fbfaf8] px-4 py-2 text-sm font-semibold text-slate-500">
-                {pagination.total} products
+                {pagination.total} sản phẩm
               </div>
             </div>
 
@@ -340,49 +343,49 @@ export const ShopPage = () => {
                   ))
                 ) : (
                   <span className="rounded-full border border-[#e7dacd] bg-[#fbfaf8] px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-                    Page {pagination.page} of {pagination.totalPages}
+                    Trang {pagination.page} / {pagination.totalPages}
                   </span>
                 )}
               </div>
 
               <div className="flex flex-wrap items-center gap-3">
-                <span className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Sort by</span>
+                <span className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Sắp xếp</span>
                 <button
                   type="button"
                   onClick={() => setSortBy("relevant")}
                   className={`rounded-full px-4 py-2 text-sm font-semibold ${sortBy === "relevant" ? "bg-clay text-white" : "bg-white text-ink"}`}
                 >
-                  Relevant
+                  Phù hợp
                 </button>
                 <button
                   type="button"
                   onClick={() => setSortBy("newest")}
                   className={`rounded-full px-4 py-2 text-sm font-semibold ${sortBy === "newest" ? "bg-clay text-white" : "bg-white text-ink"}`}
                 >
-                  Newest
+                  Mới nhất
                 </button>
                 <button
                   type="button"
                   onClick={() => setSortBy("best-selling")}
                   className={`rounded-full px-4 py-2 text-sm font-semibold ${sortBy === "best-selling" ? "bg-clay text-white" : "bg-white text-ink"}`}
                 >
-                  Best selling
+                  Bán chạy
                 </button>
                 <select
                   value={sortBy}
                   onChange={(event) => setSortBy(event.target.value)}
                   className="rounded-full border border-mist bg-white px-4 py-2 text-sm font-semibold text-ink outline-none"
                 >
-                  <option value="relevant">Default</option>
-                  <option value="price-low-high">Price: Low to high</option>
-                  <option value="price-high-low">Price: High to low</option>
+                  <option value="relevant">Mặc định</option>
+                  <option value="price-low-high">Giá: thấp đến cao</option>
+                  <option value="price-high-low">Giá: cao đến thấp</option>
                 </select>
               </div>
             </div>
           </div>
 
           {loading ? (
-            <Loader label="Loading products..." />
+            <Loader label="Đang tải sản phẩm..." />
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
               {sortedProducts.map((product) => (
@@ -405,10 +408,10 @@ export const ShopPage = () => {
               onClick={() => setFilters((prev) => ({ ...prev, page: prev.page - 1 }))}
               className="rounded-full border border-mist px-4 py-2 font-semibold disabled:opacity-40"
             >
-              Previous
+              Trước
             </button>
             <span className="text-sm text-slate-500">
-              Page {pagination.page} / {pagination.totalPages}
+              Trang {pagination.page} / {pagination.totalPages}
             </span>
             <button
               type="button"
@@ -416,7 +419,7 @@ export const ShopPage = () => {
               onClick={() => setFilters((prev) => ({ ...prev, page: prev.page + 1 }))}
               className="rounded-full border border-mist px-4 py-2 font-semibold disabled:opacity-40"
             >
-              Next
+              Tiếp
             </button>
           </div>
         </div>

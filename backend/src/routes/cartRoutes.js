@@ -18,22 +18,22 @@ router.get("/", asyncHandler(getCartHandler));
 router.post(
   "/add",
   [
-    body("product_id").isInt({ min: 1 }).withMessage("Product is required"),
-    body("quantity").isInt({ min: 1 }).withMessage("Quantity must be at least 1"),
+    body("product_id").isInt({ min: 1 }).withMessage("Sản phẩm là bắt buộc"),
+    body("quantity").isInt({ min: 1 }).withMessage("Số lượng phải lớn hơn hoặc bằng 1"),
     validate,
   ],
   asyncHandler(addToCartHandler),
 );
 router.delete(
   "/remove",
-  [body("product_id").isInt({ min: 1 }).withMessage("Product is required"), validate],
+  [body("product_id").isInt({ min: 1 }).withMessage("Sản phẩm là bắt buộc"), validate],
   asyncHandler(removeFromCartHandler),
 );
 router.patch(
   "/quantity",
   [
-    body("product_id").isInt({ min: 1 }).withMessage("Product is required"),
-    body("quantity").isInt({ min: 1 }).withMessage("Quantity must be at least 1"),
+    body("product_id").isInt({ min: 1 }).withMessage("Sản phẩm là bắt buộc"),
+    body("quantity").isInt({ min: 1 }).withMessage("Số lượng phải lớn hơn hoặc bằng 1"),
     validate,
   ],
   asyncHandler(updateCartQuantityHandler),

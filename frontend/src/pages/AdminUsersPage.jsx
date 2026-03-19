@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { api } from "../api/client";
 import { useAdminDashboard } from "../layouts/AdminLayout";
+import { formatCurrency } from "../utils/formatters";
 
 const BackButton = ({ to, label }) => (
   <Link
@@ -65,19 +66,19 @@ export const AdminUsersPage = () => {
     return (
       <section className="space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <BackButton to="/admin/users" label="Back to users" />
+          <BackButton to="/admin/users" label="Quay lại người dùng" />
           <select
             value={selectedUser.role}
             onChange={(event) => updateUserRole(selectedUser.id, event.target.value)}
             className="rounded-full border border-[#d9e8f7] px-4 py-2.5 text-sm font-semibold text-[#0f2744]"
           >
-            <option value="customer">customer</option>
-            <option value="admin">admin</option>
+            <option value="customer">Khách hàng</option>
+            <option value="admin">Quản trị viên</option>
           </select>
         </div>
 
         <div className="rounded-[30px] bg-white p-6 shadow-card">
-          <p className="text-sm uppercase tracking-[0.2em] text-[#4d7aa7]">User detail</p>
+          <p className="text-sm uppercase tracking-[0.2em] text-[#4d7aa7]">Chi tiết người dùng</p>
           <h2 className="mt-2 font-display text-3xl text-[#0f2744]">{selectedUser.name}</h2>
           <div className="mt-6 grid gap-6 xl:grid-cols-[1.1fr,0.9fr]">
             <div className="space-y-5">
@@ -87,56 +88,56 @@ export const AdminUsersPage = () => {
                   <span className="text-sm font-semibold text-[#0f2744]">{selectedUserDetail.email}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-slate-500">Phone</span>
-                  <span className="text-sm font-semibold text-[#0f2744]">{selectedUserDetail.phone || "Not set"}</span>
+                  <span className="text-sm text-slate-500">Số điện thoại</span>
+                  <span className="text-sm font-semibold text-[#0f2744]">{selectedUserDetail.phone || "Chưa cập nhật"}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-slate-500">Location</span>
-                  <span className="text-sm font-semibold text-[#0f2744]">{selectedUserDetail.location || "Not set"}</span>
+                  <span className="text-sm text-slate-500">Địa điểm</span>
+                  <span className="text-sm font-semibold text-[#0f2744]">{selectedUserDetail.location || "Chưa cập nhật"}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-slate-500">Verification</span>
+                  <span className="text-sm text-slate-500">Xác minh</span>
                   <span className="text-sm font-semibold text-[#0f2744]">
-                    {selectedUserDetail.email_verified ? "Verified" : "Pending"}
+                    {selectedUserDetail.email_verified ? "Đã xác minh" : "Chờ xác minh"}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-slate-500">Orders</span>
+                  <span className="text-sm text-slate-500">Đơn hàng</span>
                   <span className="text-sm font-semibold text-[#0f2744]">{selectedUserDetail.order_count}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-slate-500">Total spent</span>
+                  <span className="text-sm text-slate-500">Tổng chi tiêu</span>
                   <span className="text-sm font-semibold text-[#0f2744]">
-                    ${Number(selectedUserDetail.total_spent || 0).toFixed(2)}
+                    {formatCurrency(selectedUserDetail.total_spent || 0)}
                   </span>
                 </div>
               </div>
 
               <div className="rounded-2xl border border-[#d9e8f7] p-4">
-                <p className="text-sm font-semibold text-[#0f2744]">About this user</p>
-                <p className="mt-2 text-sm leading-7 text-slate-500">{selectedUserDetail.bio || "No bio added yet."}</p>
+                <p className="text-sm font-semibold text-[#0f2744]">Giới thiệu người dùng</p>
+                <p className="mt-2 text-sm leading-7 text-slate-500">{selectedUserDetail.bio || "Người dùng này chưa có phần giới thiệu."}</p>
               </div>
             </div>
 
             <div className="space-y-5">
               <div className="rounded-2xl border border-[#d9e8f7] p-4">
-                <p className="text-sm font-semibold text-[#0f2744]">Account controls</p>
+                <p className="text-sm font-semibold text-[#0f2744]">Điều khiển tài khoản</p>
                 <p className="mt-2 text-sm leading-7 text-slate-500">
-                  Review the profile carefully before changing access level or credentials. This screen is meant to keep the account operations clear and isolated.
+                  Hãy kiểm tra kỹ hồ sơ trước khi đổi quyền hoặc đặt lại mật khẩu để đảm bảo việc vận hành tài khoản luôn rõ ràng và an toàn.
                 </p>
               </div>
 
               <form onSubmit={resetPassword} className="rounded-2xl border border-[#d9e8f7] p-4">
-                <p className="text-sm font-semibold text-[#0f2744]">Reset password</p>
+                <p className="text-sm font-semibold text-[#0f2744]">Đặt lại mật khẩu</p>
                 <input
                   type="password"
-                  placeholder="New password"
+                  placeholder="Mật khẩu mới"
                   value={passwordDraft}
                   onChange={(event) => setPasswordDraft(event.target.value)}
                   className="mt-3 w-full rounded-full border border-[#d9e8f7] px-4 py-3"
                 />
                 <button type="submit" className="mt-3 rounded-full bg-[#0f4c81] px-5 py-3 text-sm font-semibold text-white">
-                  Save new password
+                  Lưu mật khẩu mới
                 </button>
               </form>
             </div>
@@ -149,8 +150,8 @@ export const AdminUsersPage = () => {
   return (
     <section className="space-y-6">
       <div className="rounded-[30px] bg-white p-6 shadow-card">
-        <p className="text-sm uppercase tracking-[0.2em] text-[#4d7aa7]">Access control</p>
-        <h2 className="mt-2 font-display text-3xl text-[#0f2744]">Users</h2>
+        <p className="text-sm uppercase tracking-[0.2em] text-[#4d7aa7]">Phân quyền truy cập</p>
+        <h2 className="mt-2 font-display text-3xl text-[#0f2744]">Người dùng</h2>
         <div className="mt-5 space-y-3">
           {dashboard.users.map((member) => (
             <button
@@ -162,7 +163,9 @@ export const AdminUsersPage = () => {
               <div>
                 <p className="font-semibold text-[#0f2744]">{member.name}</p>
                 <p className="mt-1 text-sm text-slate-500">{member.email}</p>
-                <p className="mt-1 text-xs uppercase tracking-[0.18em] text-[#4d7aa7]">{member.role}</p>
+                <p className="mt-1 text-xs uppercase tracking-[0.18em] text-[#4d7aa7]">
+                  {member.role === "admin" ? "quản trị viên" : "khách hàng"}
+                </p>
               </div>
               <span className="text-2xl text-[#7a99b8]">›</span>
             </button>

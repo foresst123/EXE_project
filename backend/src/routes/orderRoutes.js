@@ -32,7 +32,7 @@ router.patch(
         "completed",
         "cancelled",
       ])
-      .withMessage("Invalid order status"),
+      .withMessage("Trạng thái đơn hàng không hợp lệ"),
     validate,
   ],
   asyncHandler(updateOrderStatusHandler),

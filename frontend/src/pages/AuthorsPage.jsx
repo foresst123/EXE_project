@@ -17,7 +17,7 @@ export const AuthorsPage = () => {
         setAuthors(data);
         setError("");
       } catch (requestError) {
-        setError(requestError.response?.data?.message || "Failed to load authors");
+        setError(requestError.response?.data?.message || "Không thể tải danh sách nhà thiết kế");
       } finally {
         setLoading(false);
       }
@@ -27,16 +27,17 @@ export const AuthorsPage = () => {
   }, []);
 
   if (loading) {
-    return <Loader label="Loading artists..." />;
+    return <Loader label="Đang tải nhà thiết kế..." />;
   }
 
   return (
     <section className="space-y-8">
       <div className="rounded-[40px] border border-white/60 bg-white/88 p-8 shadow-float">
-        <p className="text-sm uppercase tracking-[0.3em] text-tide">Artists</p>
-        <h1 className="mt-4 font-display text-[2.8rem] text-ink md:text-[3.8rem]">Meet the artists behind the catalog</h1>
+        <p className="text-sm uppercase tracking-[0.3em] text-tide">Nhà thiết kế</p>
+        <h1 className="mt-4 font-display text-[2.8rem] text-ink md:text-[3.8rem]">Gặp gỡ những designer đứng sau bộ sưu tập</h1>
         <p className="mt-4 max-w-3xl text-lg leading-8 text-slate-600">
-          Browse the people shaping the collection. Open any artist profile to see their products and story.
+          Mỗi hồ sơ là một không gian nhỏ để bạn xem sản phẩm, cá tính sáng tạo và định hướng nghề
+          nghiệp của từng designer trên Artdict.
         </p>
       </div>
 

@@ -142,44 +142,46 @@ export const MainLayout = () => {
                 </div>
 
                 <nav
-                  className="hidden items-center justify-center gap-7 transition-all delay-[90ms] duration-[1150ms] ease-[cubic-bezier(0.23,0.82,0.2,1)] xl:flex"
+                  className={`hidden items-center justify-center gap-7 transition-all delay-[90ms] duration-[1150ms] ease-[cubic-bezier(0.23,0.82,0.2,1)] xl:flex ${
+                    isFloating ? "xl:-translate-x-6" : ""
+                  }`}
                 >
                   <NavLink
                     to="/"
                     end
                     className={({ isActive }) => navItemClass(isActive)}
                   >
-                    Home
+                    Trang chủ
                   </NavLink>
                   <NavLink
                     to="/events"
                     className={({ isActive }) => navItemClass(isActive)}
                   >
-                    Events
+                    Sự kiện
                   </NavLink>
                   <NavLink
                     to="/artists"
                     className={({ isActive }) => navItemClass(isActive)}
                   >
-                    Artists
+                    Nhà thiết kế
                   </NavLink>
                   {user?.role === "admin" && (
                     <NavLink
                       to="/admin"
                       className={({ isActive }) => navItemClass(isActive)}
                     >
-                      Admin
+                      Quản trị
                     </NavLink>
                   )}
                   <NavLink
                     to="/about"
                     className={({ isActive }) => navItemClass(isActive)}
                   >
-                    About
+                    Giới thiệu
                   </NavLink>
                 </nav>
 
-                <div className="flex items-center gap-2 justify-self-end transition-all delay-[90ms] duration-[1150ms] ease-[cubic-bezier(0.23,0.82,0.2,1)]">
+                <div className="flex shrink-0 items-center gap-2 justify-self-end transition-all delay-[90ms] duration-[1150ms] ease-[cubic-bezier(0.23,0.82,0.2,1)]">
                   {user ? (
                     <NavLink
                       to="/cart"
@@ -190,7 +192,7 @@ export const MainLayout = () => {
                             : "text-[#17120e] hover:bg-black/5"
                         }`
                       }
-                      aria-label="Cart"
+                      aria-label="Giỏ hàng"
                     >
                       <CartIcon />
                       {cartItemCount > 0 ? (
@@ -222,7 +224,7 @@ export const MainLayout = () => {
                         <div className="absolute right-0 top-[calc(100%+14px)] w-[340px] rounded-[30px] border border-white/70 bg-[#fffaf4] p-4 text-[#17120e] shadow-[0_24px_70px_rgba(29,23,18,0.18)]">
                           <div className="px-3 pb-3">
                             <p className="text-[1.55rem] font-semibold text-[#17120e]">{user.name}</p>
-                            <p className="mt-1 truncate text-sm text-[#7b6a5f]">{user.email || "Signed in account"}</p>
+                            <p className="mt-1 truncate text-sm text-[#7b6a5f]">{user.email || "Tài khoản đã đăng nhập"}</p>
                           </div>
                           <div className="h-px bg-[#eadfd3]" />
                           <div className="mt-2">
@@ -231,7 +233,7 @@ export const MainLayout = () => {
                               onClick={() => setProfileOpen(false)}
                               className="flex items-center justify-between rounded-[18px] px-3 py-3 text-[1rem] font-medium text-[#221a15] transition hover:bg-[#f3e7db]"
                             >
-                              <span>My account</span>
+                              <span>Tài khoản của tôi</span>
                               <span className="text-[#8b7768]">›</span>
                             </NavLink>
                             <NavLink
@@ -239,7 +241,7 @@ export const MainLayout = () => {
                               onClick={() => setProfileOpen(false)}
                               className="flex items-center justify-between rounded-[18px] px-3 py-3 text-[1rem] font-medium text-[#221a15] transition hover:bg-[#f3e7db]"
                             >
-                              <span>Cart</span>
+                              <span>Giỏ hàng</span>
                               <span className="text-[#8b7768]">›</span>
                             </NavLink>
                             <NavLink
@@ -247,7 +249,7 @@ export const MainLayout = () => {
                               onClick={() => setProfileOpen(false)}
                               className="flex items-center justify-between rounded-[18px] px-3 py-3 text-[1rem] font-medium text-[#221a15] transition hover:bg-[#f3e7db]"
                             >
-                              <span>Order history</span>
+                              <span>Lịch sử đơn hàng</span>
                               <span className="text-[#8b7768]">›</span>
                             </NavLink>
                             {user.role === "admin" ? (
@@ -256,7 +258,7 @@ export const MainLayout = () => {
                                 onClick={() => setProfileOpen(false)}
                                 className="flex items-center justify-between rounded-[18px] px-3 py-3 text-[1rem] font-medium text-[#221a15] transition hover:bg-[#f3e7db]"
                               >
-                                <span>Admin dashboard</span>
+                                <span>Bảng quản trị</span>
                                 <span className="text-[#8b7768]">›</span>
                               </NavLink>
                             ) : null}
@@ -265,7 +267,7 @@ export const MainLayout = () => {
                               onClick={() => setProfileOpen(false)}
                               className="flex items-center justify-between rounded-[18px] px-3 py-3 text-[1rem] font-medium text-[#221a15] transition hover:bg-[#f3e7db]"
                             >
-                              <span>Help and support</span>
+                              <span>Trợ giúp và hỗ trợ</span>
                               <span className="text-[#8b7768]">›</span>
                             </Link>
                             <button
@@ -280,7 +282,7 @@ export const MainLayout = () => {
                                 <span className="text-[#6f513f]">
                                   <LogoutIcon />
                                 </span>
-                                <span>Logout</span>
+                                <span>Đăng xuất</span>
                               </span>
                               <span className="text-[#8b7768]">›</span>
                             </button>
@@ -292,17 +294,17 @@ export const MainLayout = () => {
                     <>
                       <NavLink
                         to="/login"
-                        className={`rounded-full border border-white/16 bg-white/10 px-4 py-2 text-[0.98rem] font-medium transition hover:bg-white/14 ${
+                        className={`inline-flex shrink-0 items-center whitespace-nowrap rounded-full border border-white/16 bg-white/10 px-4 py-2 text-[0.98rem] font-medium transition hover:bg-white/14 ${
                           "text-[#17120e]"
                         }`}
                       >
-                        Login
+                        Đăng nhập
                       </NavLink>
                       <NavLink
                         to="/register"
-                        className="rounded-full bg-[#f2eee9] px-4 py-2 text-[0.98rem] font-medium text-[#17130f] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
+                        className="inline-flex shrink-0 items-center whitespace-nowrap rounded-full bg-[#f2eee9] px-4 py-2 text-[0.98rem] font-medium text-[#17130f] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
                       >
-                        Sign up
+                        Đăng ký
                       </NavLink>
                     </>
                   )}
@@ -322,13 +324,13 @@ export const MainLayout = () => {
           <div className="mx-auto max-w-7xl px-4 py-12 md:px-6">
             <div className="flex flex-col items-center gap-4 text-center text-sm text-slate-600">
               <p className="font-display text-2xl text-ink">Artdict</p>
-              <p>Email: <a href="mailto:support@artdict.local" className="font-semibold text-[#111827]">support@artdict.local</a></p>
-              <p>Hotline: <span className="font-semibold text-[#111827]">1900 0000</span></p>
-              <p>Address: <span className="font-semibold text-[#111827]">Ho Chi Minh City, Vietnam</span></p>
+              <p>Email: <a href="mailto:hello@artdict.vn" className="font-semibold text-[#111827]">hello@artdict.vn</a></p>
+              <p>Hotline: <span className="font-semibold text-[#111827]">1900 2468</span></p>
+              <p>Địa chỉ: <span className="font-semibold text-[#111827]">TP. Hồ Chí Minh, Việt Nam</span></p>
             </div>
 
             <div className="mt-8 border-t border-[#eadfd3] pt-6 text-center text-sm text-[#7b6a5f]">
-              <p>© 2026 Artdict. All rights reserved.</p>
+              <p>© 2026 Artdict. Nền tảng kết nối designer sinh viên và khách hàng sáng tạo.</p>
             </div>
           </div>
         </footer>

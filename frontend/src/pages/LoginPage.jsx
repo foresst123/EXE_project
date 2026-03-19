@@ -17,17 +17,17 @@ export const LoginPage = () => {
       await login(form);
       navigate("/");
     } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
+      setError(err.response?.data?.message || "Đăng nhập thất bại");
     }
   };
 
   return (
     <AuthShell
-      eyebrow="Welcome back"
-      title="Login"
-      footerText="Need an account?"
+      eyebrow="Chào mừng trở lại"
+      title="Đăng nhập"
+      footerText="Chưa có tài khoản?"
       footerLink="/register"
-      footerLabel="Create one"
+      footerLabel="Đăng ký ngay"
     >
       <form className="mt-6 space-y-4" onSubmit={onSubmit}>
         <input
@@ -39,14 +39,14 @@ export const LoginPage = () => {
         />
         <input
           type="password"
-          placeholder="Password"
+          placeholder="Mật khẩu"
           className="w-full rounded-full border border-mist px-5 py-3"
           value={form.password}
           onChange={(event) => setForm((prev) => ({ ...prev, password: event.target.value }))}
         />
         {error && <ErrorMessage message={error} />}
         <button type="submit" disabled={loading} className="w-full rounded-full bg-ink px-5 py-3 text-white">
-          {loading ? "Signing in..." : "Login"}
+          {loading ? "Đang đăng nhập..." : "Đăng nhập"}
         </button>
       </form>
     </AuthShell>

@@ -6,7 +6,7 @@ export const protect = async (req, _res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader?.startsWith("Bearer ")) {
-    return next(new AppError("Authentication required", 401));
+    return next(new AppError("Vui lòng đăng nhập để tiếp tục", 401));
   }
 
   const token = authHeader.split(" ")[1];
@@ -19,19 +19,19 @@ export const protect = async (req, _res, next) => {
     );
 
     if (!result.rows[0]) {
-      return next(new AppError("User not found", 401));
+      return next(new AppError("Không tìm thấy người dùng", 401));
     }
 
     req.user = result.rows[0];
     return next();
   } catch {
-    return next(new AppError("Invalid or expired token", 401));
+    return next(new AppError("Token không hợp lệ hoặc đã hết hạn", 401));
   }
 };
 
 export const requireAdmin = (req, _res, next) => {
   if (req.user?.role !== "admin") {
-    return next(new AppError("Admin access required", 403));
+    return next(new AppError("Chỉ quản trị viên mới có quyền thực hiện thao tác này", 403));
   }
 
   return next();

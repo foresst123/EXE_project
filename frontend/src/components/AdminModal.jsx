@@ -15,7 +15,7 @@ export const AdminModal = ({ open, title, subtitle, onClose, children }) => {
             type="button"
             onClick={onClose}
             className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#d9e8f7] text-lg font-semibold text-[#0f4c81] transition hover:bg-[#f3f8fe]"
-            aria-label="Close dialog"
+            aria-label="Đóng hộp thoại"
           >
             ×
           </button>

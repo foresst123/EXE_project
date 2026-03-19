@@ -26,7 +26,7 @@ const getOrderWithItems = async (orderId) => {
   );
 
   if (!result.rows[0]) {
-    throw new AppError("Order not found", 404);
+    throw new AppError("Không tìm thấy đơn hàng", 404);
   }
 
   return {
@@ -39,7 +39,7 @@ export const createCheckoutSession = async (user) => {
   const cart = await getCart(user.id);
 
   if (!cart.items.length) {
-    throw new AppError("Cart is empty", 400);
+    throw new AppError("Giỏ hàng đang trống", 400);
   }
 
   const client = await pool.connect();
@@ -49,7 +49,7 @@ export const createCheckoutSession = async (user) => {
 
     for (const item of cart.items) {
       if (item.quantity > item.stock) {
-        throw new AppError(`Insufficient stock for ${item.name}`, 400);
+        throw new AppError(`Tồn kho không đủ cho sản phẩm ${item.name}`, 400);
       }
     }
 
@@ -83,8 +83,8 @@ export const createCheckoutSession = async (user) => {
       line_items: cart.items.map((item) => ({
         quantity: item.quantity,
         price_data: {
-          currency: "usd",
-          unit_amount: Math.round(Number(item.price) * 100),
+          currency: "vnd",
+          unit_amount: Math.round(Number(item.price)),
           product_data: {
             name: item.name,
             images: item.image_url ? [item.image_url] : [],
@@ -138,7 +138,7 @@ export const getOrderById = async (id, user) => {
   const order = await getOrderWithItems(id);
 
   if (user.role !== "admin" && order.user_id !== user.id) {
-    throw new AppError("Access denied", 403);
+    throw new AppError("Bạn không có quyền truy cập đơn hàng này", 403);
   }
 
   return order;
@@ -151,7 +151,7 @@ export const updateOrderStatus = async (id, status) => {
   );
 
   if (!result.rows[0]) {
-    throw new AppError("Order not found", 404);
+    throw new AppError("Không tìm thấy đơn hàng", 404);
   }
 
   return {
@@ -226,11 +226,11 @@ export const confirmOrderPayment = async (id, user) => {
     const order = orderResult.rows[0];
 
     if (!order) {
-      throw new AppError("Order not found", 404);
+      throw new AppError("Không tìm thấy đơn hàng", 404);
     }
 
     if (user.role !== "admin" && order.user_id !== user.id) {
-      throw new AppError("Access denied", 403);
+      throw new AppError("Bạn không có quyền xác nhận đơn hàng này", 403);
     }
 
     if (order.payment_status === "paid") {
@@ -239,7 +239,7 @@ export const confirmOrderPayment = async (id, user) => {
     }
 
     if (!order.stripe_session_id) {
-      throw new AppError("No Stripe session found for this order", 400);
+      throw new AppError("Đơn hàng này chưa có phiên Stripe hợp lệ", 400);
     }
 
     const session = await stripe.checkout.sessions.retrieve(order.stripe_session_id);
@@ -266,7 +266,7 @@ export const confirmOrderPayment = async (id, user) => {
 
 export const handleStripeWebhook = async (signature, rawBody) => {
   if (!env.stripeWebhookSecret) {
-    throw new AppError("Stripe webhook secret is not configured", 500);
+    throw new AppError("Chưa cấu hình Stripe webhook secret", 500);
   }
 
   const stripe = getStripeClient();
@@ -275,7 +275,7 @@ export const handleStripeWebhook = async (signature, rawBody) => {
   try {
     event = stripe.webhooks.constructEvent(rawBody, signature, env.stripeWebhookSecret);
   } catch {
-    throw new AppError("Invalid Stripe webhook signature", 400);
+    throw new AppError("Chữ ký webhook Stripe không hợp lệ", 400);
   }
 
   if (

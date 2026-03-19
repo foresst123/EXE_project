@@ -29,13 +29,13 @@ router.post(
     body("content")
       .trim()
       .notEmpty()
-      .withMessage("Comment content is required")
+      .withMessage("Nội dung đánh giá là bắt buộc")
       .isLength({ max: 500 })
-      .withMessage("Comment must be 500 characters or fewer"),
+      .withMessage("Đánh giá không được vượt quá 500 ký tự"),
     body("media_type")
       .optional({ values: "falsy" })
       .isIn(["image", "video"])
-      .withMessage("Media type must be image or video"),
+      .withMessage("Loại tệp phải là ảnh hoặc video"),
     validate,
   ],
   asyncHandler(createCommentHandler),
@@ -46,11 +46,11 @@ router.post(
   protect,
   requireAdmin,
   [
-    body("name").trim().notEmpty().withMessage("Product name is required"),
-    body("price").isFloat({ gt: 0 }).withMessage("Price must be greater than 0"),
-    body("stock").isInt({ min: 0 }).withMessage("Stock must be zero or greater"),
-    body("category_id").isInt({ min: 1 }).withMessage("Category is required"),
-    body("author_id").isInt({ min: 1 }).withMessage("Author is required"),
+    body("name").trim().notEmpty().withMessage("Tên sản phẩm là bắt buộc"),
+    body("price").isFloat({ gt: 0 }).withMessage("Giá bán phải lớn hơn 0"),
+    body("stock").isInt({ min: 0 }).withMessage("Tồn kho phải lớn hơn hoặc bằng 0"),
+    body("category_id").isInt({ min: 1 }).withMessage("Danh mục là bắt buộc"),
+    body("author_id").isInt({ min: 1 }).withMessage("Nhà thiết kế là bắt buộc"),
     validate,
   ],
   asyncHandler(createProductHandler),
@@ -61,9 +61,9 @@ router.put(
   protect,
   requireAdmin,
   [
-    body("price").optional().isFloat({ gt: 0 }).withMessage("Price must be greater than 0"),
-    body("stock").optional().isInt({ min: 0 }).withMessage("Stock must be zero or greater"),
-    body("author_id").optional().isInt({ min: 1 }).withMessage("Author is invalid"),
+    body("price").optional().isFloat({ gt: 0 }).withMessage("Giá bán phải lớn hơn 0"),
+    body("stock").optional().isInt({ min: 0 }).withMessage("Tồn kho phải lớn hơn hoặc bằng 0"),
+    body("author_id").optional().isInt({ min: 1 }).withMessage("Nhà thiết kế không hợp lệ"),
     validate,
   ],
   asyncHandler(updateProductHandler),

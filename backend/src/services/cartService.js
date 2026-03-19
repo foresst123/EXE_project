@@ -24,11 +24,11 @@ export const addToCart = async (userId, productId, quantity) => {
   const product = productResult.rows[0];
 
   if (!product) {
-    throw new AppError("Product not found", 404);
+    throw new AppError("Không tìm thấy sản phẩm", 404);
   }
 
   if (quantity > product.stock) {
-    throw new AppError("Requested quantity exceeds stock", 400);
+    throw new AppError("Số lượng yêu cầu vượt quá tồn kho", 400);
   }
 
   const existing = await query(
@@ -40,7 +40,7 @@ export const addToCart = async (userId, productId, quantity) => {
     const nextQuantity = existing.rows[0].quantity + quantity;
 
     if (nextQuantity > product.stock) {
-      throw new AppError("Requested quantity exceeds stock", 400);
+      throw new AppError("Số lượng yêu cầu vượt quá tồn kho", 400);
     }
 
     await query("UPDATE cart_items SET quantity = $1 WHERE id = $2", [
@@ -62,15 +62,15 @@ export const updateCartQuantity = async (userId, productId, quantity) => {
   const product = productResult.rows[0];
 
   if (!product) {
-    throw new AppError("Product not found", 404);
+    throw new AppError("Không tìm thấy sản phẩm", 404);
   }
 
   if (quantity < 1) {
-    throw new AppError("Quantity must be at least 1", 400);
+    throw new AppError("Số lượng phải lớn hơn hoặc bằng 1", 400);
   }
 
   if (quantity > product.stock) {
-    throw new AppError("Requested quantity exceeds stock", 400);
+    throw new AppError("Số lượng yêu cầu vượt quá tồn kho", 400);
   }
 
   const existing = await query(
@@ -79,7 +79,7 @@ export const updateCartQuantity = async (userId, productId, quantity) => {
   );
 
   if (!existing.rows[0]) {
-    throw new AppError("Cart item not found", 404);
+    throw new AppError("Không tìm thấy sản phẩm trong giỏ hàng", 404);
   }
 
   await query("UPDATE cart_items SET quantity = $1 WHERE id = $2", [

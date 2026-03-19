@@ -17,22 +17,22 @@ export const RegisterPage = () => {
       await register(form);
       navigate("/");
     } catch (err) {
-      setError(err.response?.data?.message || "Registration failed");
+      setError(err.response?.data?.message || "Đăng ký thất bại");
     }
   };
 
   return (
     <AuthShell
-      eyebrow="Start shopping"
-      title="Create account"
-      footerText="Already have an account?"
+      eyebrow="Bắt đầu cùng Artdict"
+      title="Tạo tài khoản"
+      footerText="Đã có tài khoản?"
       footerLink="/login"
-      footerLabel="Login"
+      footerLabel="Đăng nhập"
     >
       <form className="mt-6 space-y-4" onSubmit={onSubmit}>
         <input
           type="text"
-          placeholder="Full name"
+          placeholder="Họ và tên"
           className="w-full rounded-full border border-mist px-5 py-3"
           value={form.name}
           onChange={(event) => setForm((prev) => ({ ...prev, name: event.target.value }))}
@@ -46,14 +46,14 @@ export const RegisterPage = () => {
         />
         <input
           type="password"
-          placeholder="Password"
+          placeholder="Mật khẩu"
           className="w-full rounded-full border border-mist px-5 py-3"
           value={form.password}
           onChange={(event) => setForm((prev) => ({ ...prev, password: event.target.value }))}
         />
         {error && <ErrorMessage message={error} />}
         <button type="submit" disabled={loading} className="w-full rounded-full bg-ink px-5 py-3 text-white">
-          {loading ? "Creating account..." : "Register"}
+          {loading ? "Đang tạo tài khoản..." : "Đăng ký"}
         </button>
       </form>
     </AuthShell>

@@ -23,7 +23,7 @@ export const AuthShell = ({ eyebrow, title, subtitle, footerText, footerLink, fo
 
     <footer className="border-t border-[#eadfd3] pt-6 text-center text-sm text-[#7b6a5f]">
       <p>Artdict</p>
-      <p className="mt-1">support@artdict.local</p>
+      <p className="mt-1">hello@artdict.vn</p>
     </footer>
   </section>
 );

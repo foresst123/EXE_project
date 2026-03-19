@@ -48,7 +48,7 @@ export const getUserByIdForAdmin = async (id) => {
   );
 
   if (!result.rows[0]) {
-    throw new AppError("User not found", 404);
+    throw new AppError("Không tìm thấy người dùng", 404);
   }
 
   return result.rows[0];
@@ -64,7 +64,7 @@ export const updateUserRole = async (id, role) => {
   );
 
   if (!result.rows[0]) {
-    throw new AppError("User not found", 404);
+    throw new AppError("Không tìm thấy người dùng", 404);
   }
 
   return result.rows[0];
@@ -74,7 +74,7 @@ export const getCurrentUser = async (id) => {
   const result = await query(`SELECT ${userSelect} FROM users WHERE id = $1`, [id]);
 
   if (!result.rows[0]) {
-    throw new AppError("User not found", 404);
+    throw new AppError("Không tìm thấy người dùng", 404);
   }
 
   return result.rows[0];
@@ -103,19 +103,19 @@ export const updateCurrentUserEmail = async (id, nextEmail, currentPassword) => 
   const user = existing.rows[0];
 
   if (!user) {
-    throw new AppError("User not found", 404);
+    throw new AppError("Không tìm thấy người dùng", 404);
   }
 
   const isValid = await bcrypt.compare(currentPassword, user.password_hash);
 
   if (!isValid) {
-    throw new AppError("Current password is incorrect", 400);
+    throw new AppError("Mật khẩu hiện tại không đúng", 400);
   }
 
   const duplicate = await query("SELECT id FROM users WHERE email = LOWER($1) AND id <> $2", [nextEmail, id]);
 
   if (duplicate.rows[0]) {
-    throw new AppError("Email already registered", 409);
+    throw new AppError("Email này đã được đăng ký", 409);
   }
 
   const result = await query(
@@ -139,13 +139,13 @@ export const updateCurrentUserPassword = async (id, currentPassword, nextPasswor
   const user = existing.rows[0];
 
   if (!user) {
-    throw new AppError("User not found", 404);
+    throw new AppError("Không tìm thấy người dùng", 404);
   }
 
   const isValid = await bcrypt.compare(currentPassword, user.password_hash);
 
   if (!isValid) {
-    throw new AppError("Current password is incorrect", 400);
+    throw new AppError("Mật khẩu hiện tại không đúng", 400);
   }
 
   const nextHash = await bcrypt.hash(nextPassword, 10);
@@ -186,11 +186,11 @@ export const sendVerificationEmail = async (id) => {
   );
 
   if (!result.rows[0]) {
-    throw new AppError("User not found", 404);
+    throw new AppError("Không tìm thấy người dùng", 404);
   }
 
   return {
-    message: "Verification instructions were sent to your email.",
+    message: "Đã gửi hướng dẫn xác minh tới email của bạn.",
     user: result.rows[0],
   };
 };
@@ -208,7 +208,7 @@ export const updateUserPasswordAsAdmin = async (id, nextPassword) => {
   );
 
   if (!result.rows[0]) {
-    throw new AppError("User not found", 404);
+    throw new AppError("Không tìm thấy người dùng", 404);
   }
 
   return result.rows[0];

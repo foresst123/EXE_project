@@ -96,7 +96,7 @@ export const getProductById = async (id) => {
   );
 
   if (!result.rows[0]) {
-    throw new AppError("Product not found", 404);
+    throw new AppError("Không tìm thấy sản phẩm", 404);
   }
 
   return result.rows[0];
@@ -157,7 +157,7 @@ export const deleteProduct = async (id) => {
   const result = await query("DELETE FROM products WHERE id = $1 RETURNING id", [id]);
 
   if (!result.rows[0]) {
-    throw new AppError("Product not found", 404);
+    throw new AppError("Không tìm thấy sản phẩm", 404);
   }
 
   return { success: true };

@@ -25,7 +25,7 @@ export const registerUser = async ({ name, email, password }) => {
   const existingUser = await query("SELECT id FROM users WHERE email = $1", [email]);
 
   if (existingUser.rows[0]) {
-    throw new AppError("Email already registered", 409);
+    throw new AppError("Email này đã được đăng ký", 409);
   }
 
   const passwordHash = await bcrypt.hash(password, 10);
@@ -49,13 +49,13 @@ export const loginUser = async ({ email, password }) => {
   const user = result.rows[0];
 
   if (!user) {
-    throw new AppError("Invalid email or password", 401);
+    throw new AppError("Email hoặc mật khẩu không đúng", 401);
   }
 
   const isValid = await bcrypt.compare(password, user.password_hash);
 
   if (!isValid) {
-    throw new AppError("Invalid email or password", 401);
+    throw new AppError("Email hoặc mật khẩu không đúng", 401);
   }
 
   const token = signToken({ userId: user.id, role: user.role });

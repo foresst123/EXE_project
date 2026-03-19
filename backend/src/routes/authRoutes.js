@@ -9,11 +9,11 @@ const router = express.Router();
 router.post(
   "/register",
   [
-    body("name").trim().notEmpty().withMessage("Name is required"),
-    body("email").isEmail().withMessage("Valid email is required"),
+    body("name").trim().notEmpty().withMessage("Tên là bắt buộc"),
+    body("email").isEmail().withMessage("Email không hợp lệ"),
     body("password")
       .isLength({ min: 6 })
-      .withMessage("Password must be at least 6 characters"),
+      .withMessage("Mật khẩu phải có ít nhất 6 ký tự"),
     validate,
   ],
   asyncHandler(register),
@@ -22,12 +22,11 @@ router.post(
 router.post(
   "/login",
   [
-    body("email").isEmail().withMessage("Valid email is required"),
-    body("password").notEmpty().withMessage("Password is required"),
+    body("email").isEmail().withMessage("Email không hợp lệ"),
+    body("password").notEmpty().withMessage("Mật khẩu là bắt buộc"),
     validate,
   ],
   asyncHandler(login),
 );
 
 export default router;
-

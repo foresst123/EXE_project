@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { api } from "../api/client";
 import { AdminModal } from "../components/AdminModal";
 import { useAdminDashboard } from "../layouts/AdminLayout";
+import { formatCurrency } from "../utils/formatters";
 
 const emptyProduct = {
   name: "",
@@ -26,14 +27,14 @@ const BackButton = ({ to, label }) => (
 
 const ProductForm = ({ dashboard, productForm, setProductForm, onSubmit, submitLabel }) => (
   <form onSubmit={onSubmit} className="space-y-3">
-    <input className="w-full rounded-full border border-[#d9e8f7] px-4 py-3" placeholder="Name" value={productForm.name} onChange={(event) => setProductForm((prev) => ({ ...prev, name: event.target.value }))} />
-    <textarea className="w-full rounded-[24px] border border-[#d9e8f7] px-4 py-3" placeholder="Description" rows="5" value={productForm.description} onChange={(event) => setProductForm((prev) => ({ ...prev, description: event.target.value }))} />
+    <input className="w-full rounded-full border border-[#d9e8f7] px-4 py-3" placeholder="Tên sản phẩm" value={productForm.name} onChange={(event) => setProductForm((prev) => ({ ...prev, name: event.target.value }))} />
+    <textarea className="w-full rounded-[24px] border border-[#d9e8f7] px-4 py-3" placeholder="Mô tả sản phẩm" rows="5" value={productForm.description} onChange={(event) => setProductForm((prev) => ({ ...prev, description: event.target.value }))} />
     <div className="grid gap-3 md:grid-cols-2">
-      <input className="w-full rounded-full border border-[#d9e8f7] px-4 py-3" placeholder="Price" value={productForm.price} onChange={(event) => setProductForm((prev) => ({ ...prev, price: event.target.value }))} />
-      <input className="w-full rounded-full border border-[#d9e8f7] px-4 py-3" placeholder="Stock" value={productForm.stock} onChange={(event) => setProductForm((prev) => ({ ...prev, stock: event.target.value }))} />
+      <input className="w-full rounded-full border border-[#d9e8f7] px-4 py-3" placeholder="Giá bán (VND)" value={productForm.price} onChange={(event) => setProductForm((prev) => ({ ...prev, price: event.target.value }))} />
+      <input className="w-full rounded-full border border-[#d9e8f7] px-4 py-3" placeholder="Tồn kho" value={productForm.stock} onChange={(event) => setProductForm((prev) => ({ ...prev, stock: event.target.value }))} />
     </div>
     <select className="w-full rounded-full border border-[#d9e8f7] px-4 py-3" value={productForm.category_id} onChange={(event) => setProductForm((prev) => ({ ...prev, category_id: event.target.value }))}>
-      <option value="">Select category</option>
+      <option value="">Chọn danh mục</option>
       {dashboard.categories.map((category) => (
         <option key={category.id} value={category.id}>
           {category.name}
@@ -41,14 +42,14 @@ const ProductForm = ({ dashboard, productForm, setProductForm, onSubmit, submitL
       ))}
     </select>
     <select className="w-full rounded-full border border-[#d9e8f7] px-4 py-3" value={productForm.author_id} onChange={(event) => setProductForm((prev) => ({ ...prev, author_id: event.target.value }))}>
-      <option value="">Select artist</option>
+      <option value="">Chọn nhà thiết kế</option>
       {dashboard.authors.map((artist) => (
         <option key={artist.id} value={artist.id}>
           {artist.name}
         </option>
       ))}
     </select>
-    <input className="w-full rounded-full border border-[#d9e8f7] px-4 py-3" placeholder="Image URL" value={productForm.image_url} onChange={(event) => setProductForm((prev) => ({ ...prev, image_url: event.target.value }))} />
+    <input className="w-full rounded-full border border-[#d9e8f7] px-4 py-3" placeholder="Liên kết ảnh" value={productForm.image_url} onChange={(event) => setProductForm((prev) => ({ ...prev, image_url: event.target.value }))} />
     <button type="submit" className="w-full rounded-full bg-[#0f4c81] px-5 py-3 text-white">
       {submitLabel}
     </button>
@@ -126,64 +127,64 @@ export const AdminProductsPage = () => {
     return (
       <section className="space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <BackButton to="/admin/products" label="Back to products" />
+          <BackButton to="/admin/products" label="Quay lại sản phẩm" />
           <div className="flex gap-3">
             <button
               type="button"
               onClick={() => openEdit(selectedProduct)}
               className="rounded-full border border-[#d9e8f7] px-5 py-3 text-sm font-semibold text-[#0f4c81]"
             >
-              Edit product
+              Sửa sản phẩm
             </button>
             <button
               type="button"
               onClick={() => deleteProduct(selectedProduct.id)}
               className="rounded-full border border-red-200 px-5 py-3 text-sm font-semibold text-red-600"
             >
-              Delete
+              Xóa
             </button>
           </div>
         </div>
 
         <div className="rounded-[30px] bg-white p-6 shadow-card">
-          <p className="text-sm uppercase tracking-[0.2em] text-[#4d7aa7]">Product detail</p>
+          <p className="text-sm uppercase tracking-[0.2em] text-[#4d7aa7]">Chi tiết sản phẩm</p>
           <h2 className="mt-2 font-display text-3xl text-[#0f2744]">{selectedProduct.name}</h2>
           <div className="mt-6 grid gap-6 xl:grid-cols-[360px,1fr]">
             <div className="overflow-hidden rounded-[28px] border border-[#d9e8f7] bg-[#f4f8fc]">
               {selectedProduct.image_url ? (
                 <img src={selectedProduct.image_url} alt={selectedProduct.name} className="h-[320px] w-full object-cover" />
               ) : (
-                <div className="grid h-[320px] place-items-center text-sm text-slate-500">No image</div>
+                <div className="grid h-[320px] place-items-center text-sm text-slate-500">Chưa có ảnh</div>
               )}
             </div>
             <div className="space-y-5">
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="rounded-[24px] border border-[#d9e8f7] p-4">
-                  <p className="text-xs uppercase tracking-[0.18em] text-[#4d7aa7]">Price</p>
-                  <p className="mt-2 text-3xl font-semibold text-[#0f2744]">${Number(selectedProduct.price).toFixed(2)}</p>
+                  <p className="text-xs uppercase tracking-[0.18em] text-[#4d7aa7]">Giá bán</p>
+                  <p className="mt-2 text-3xl font-semibold text-[#0f2744]">{formatCurrency(selectedProduct.price)}</p>
                 </div>
                 <div className="rounded-[24px] border border-[#d9e8f7] p-4">
-                  <p className="text-xs uppercase tracking-[0.18em] text-[#4d7aa7]">Inventory</p>
+                  <p className="text-xs uppercase tracking-[0.18em] text-[#4d7aa7]">Tồn kho</p>
                   <p className="mt-2 text-3xl font-semibold text-[#0f2744]">{selectedProduct.stock}</p>
                 </div>
               </div>
               <div className="grid gap-4 md:grid-cols-3">
                 <div className="rounded-[24px] border border-[#d9e8f7] p-4">
-                  <p className="text-xs uppercase tracking-[0.18em] text-[#4d7aa7]">Category</p>
-                  <p className="mt-2 text-lg font-semibold text-[#0f2744]">{selectedProduct.category_name || "Not set"}</p>
+                  <p className="text-xs uppercase tracking-[0.18em] text-[#4d7aa7]">Danh mục</p>
+                  <p className="mt-2 text-lg font-semibold text-[#0f2744]">{selectedProduct.category_name || "Chưa gán"}</p>
                 </div>
                 <div className="rounded-[24px] border border-[#d9e8f7] p-4">
-                  <p className="text-xs uppercase tracking-[0.18em] text-[#4d7aa7]">Artist</p>
-                  <p className="mt-2 text-lg font-semibold text-[#0f2744]">{selectedProduct.author_name || "Not set"}</p>
+                  <p className="text-xs uppercase tracking-[0.18em] text-[#4d7aa7]">Nhà thiết kế</p>
+                  <p className="mt-2 text-lg font-semibold text-[#0f2744]">{selectedProduct.author_name || "Chưa gán"}</p>
                 </div>
                 <div className="rounded-[24px] border border-[#d9e8f7] p-4">
-                  <p className="text-xs uppercase tracking-[0.18em] text-[#4d7aa7]">Sold</p>
+                  <p className="text-xs uppercase tracking-[0.18em] text-[#4d7aa7]">Đã bán</p>
                   <p className="mt-2 text-lg font-semibold text-[#0f2744]">{selectedProduct.sold_count || 0}</p>
                 </div>
               </div>
               <div className="rounded-[24px] border border-[#d9e8f7] p-5">
-                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#4d7aa7]">Description</p>
-                <p className="mt-3 text-sm leading-7 text-slate-600">{selectedProduct.description || "No description added yet."}</p>
+                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#4d7aa7]">Mô tả</p>
+                <p className="mt-3 text-sm leading-7 text-slate-600">{selectedProduct.description || "Chưa có mô tả cho sản phẩm này."}</p>
               </div>
             </div>
           </div>
@@ -192,15 +193,15 @@ export const AdminProductsPage = () => {
         <AdminModal
           open={modalOpen}
           onClose={closeModal}
-          subtitle="Catalog management"
-          title={editingId ? "Edit product" : "Add a product"}
+          subtitle="Quản lý danh mục"
+          title={editingId ? "Sửa sản phẩm" : "Thêm sản phẩm"}
         >
           <ProductForm
             dashboard={dashboard}
             productForm={productForm}
             setProductForm={setProductForm}
             onSubmit={submitProduct}
-            submitLabel={editingId ? "Save product" : "Create product"}
+            submitLabel={editingId ? "Lưu sản phẩm" : "Tạo sản phẩm"}
           />
         </AdminModal>
       </section>
@@ -211,11 +212,11 @@ export const AdminProductsPage = () => {
     <section className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-[30px] bg-white p-6 shadow-card">
         <div>
-          <p className="text-sm uppercase tracking-[0.2em] text-[#4d7aa7]">Catalog management</p>
-          <h2 className="mt-2 font-display text-3xl text-[#0f2744]">Products</h2>
+          <p className="text-sm uppercase tracking-[0.2em] text-[#4d7aa7]">Quản lý danh mục</p>
+          <h2 className="mt-2 font-display text-3xl text-[#0f2744]">Sản phẩm</h2>
         </div>
         <button type="button" onClick={openCreate} className="rounded-full bg-[#0f4c81] px-5 py-3 text-sm font-semibold text-white">
-          Add product
+          Thêm sản phẩm
         </button>
       </div>
 
@@ -231,10 +232,10 @@ export const AdminProductsPage = () => {
               <div className="min-w-0 flex-1">
                 <p className="font-semibold text-[#0f2744]">{product.name}</p>
                 <p className="mt-1 text-sm text-slate-500">
-                  ${Number(product.price).toFixed(2)} • Stock {product.stock} • Sold {product.sold_count || 0}
+                  {formatCurrency(product.price)} • Tồn kho {product.stock} • Đã bán {product.sold_count || 0}
                 </p>
                 <p className="mt-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#4d7aa7]">
-                  {product.author_name || "No artist"}
+                  {product.author_name || "Chưa gắn designer"}
                 </p>
               </div>
               <span className="text-2xl text-[#7a99b8]">›</span>
@@ -246,15 +247,15 @@ export const AdminProductsPage = () => {
       <AdminModal
         open={modalOpen}
         onClose={closeModal}
-        subtitle="Catalog management"
-        title={editingId ? "Edit product" : "Add a product"}
+        subtitle="Quản lý danh mục"
+        title={editingId ? "Sửa sản phẩm" : "Thêm sản phẩm"}
       >
         <ProductForm
           dashboard={dashboard}
           productForm={productForm}
           setProductForm={setProductForm}
           onSubmit={submitProduct}
-          submitLabel={editingId ? "Save product" : "Create product"}
+          submitLabel={editingId ? "Lưu sản phẩm" : "Tạo sản phẩm"}
         />
       </AdminModal>
     </section>

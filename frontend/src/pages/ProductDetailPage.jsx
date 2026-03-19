@@ -5,6 +5,7 @@ import { ErrorMessage } from "../components/ErrorMessage";
 import { Loader } from "../components/Loader";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
+import { formatCurrency, formatShortDate } from "../utils/formatters";
 
 export const ProductDetailPage = () => {
   const { id } = useParams();
@@ -39,7 +40,7 @@ export const ProductDetailPage = () => {
         setProduct(productResponse.data);
         setComments(commentResponse.data.items);
       } catch (requestError) {
-        setError(requestError.response?.data?.message || "Failed to load product");
+        setError(requestError.response?.data?.message || "Không thể tải thông tin sản phẩm");
       } finally {
         setLoading(false);
       }
@@ -64,7 +65,7 @@ export const ProductDetailPage = () => {
           hasPurchased: false,
           hasCommented: false,
           canComment: false,
-          message: requestError.response?.data?.message || "Could not verify review access",
+          message: requestError.response?.data?.message || "Không thể kiểm tra quyền đánh giá",
         });
       } finally {
         setCommentPermissionLoading(false);
@@ -86,7 +87,7 @@ export const ProductDetailPage = () => {
       setAdded(true);
       window.setTimeout(() => setAdded(false), 1800);
     } catch (requestError) {
-      setError(requestError.response?.data?.message || "Could not add product to cart");
+      setError(requestError.response?.data?.message || "Không thể thêm sản phẩm vào giỏ hàng");
     }
   };
 
@@ -101,7 +102,7 @@ export const ProductDetailPage = () => {
       setError("");
       navigate("/checkout");
     } catch (requestError) {
-      setError(requestError.response?.data?.message || "Could not start checkout");
+      setError(requestError.response?.data?.message || "Không thể bắt đầu thanh toán");
     }
   };
 
@@ -109,7 +110,7 @@ export const ProductDetailPage = () => {
     event.preventDefault();
 
     if (!user) {
-      setCommentError("Please login to comment on this product");
+      setCommentError("Vui lòng đăng nhập để đánh giá sản phẩm này");
       return;
     }
 
@@ -127,7 +128,7 @@ export const ProductDetailPage = () => {
       setCommentPermission({ hasPurchased: true, hasCommented: true, canComment: false });
       setShowCommentModal(false);
     } catch (requestError) {
-      setCommentError(requestError.response?.data?.message || "Could not submit comment");
+      setCommentError(requestError.response?.data?.message || "Không thể gửi đánh giá");
     } finally {
       setCommentSubmitting(false);
     }
@@ -142,8 +143,8 @@ export const ProductDetailPage = () => {
     if (!commentPermission?.canComment) {
       setCommentError(
         commentPermission?.hasCommented
-          ? "You have already reviewed this product"
-          : "Only customers who purchased this product can leave a review",
+          ? "Bạn đã đánh giá sản phẩm này rồi"
+          : "Chỉ khách đã mua sản phẩm mới có thể đánh giá",
       );
       return;
     }
@@ -153,11 +154,11 @@ export const ProductDetailPage = () => {
   };
 
   if (loading) {
-    return <Loader label="Loading product details..." />;
+    return <Loader label="Đang tải chi tiết sản phẩm..." />;
   }
 
   if (!product) {
-    return <ErrorMessage message={error || "Product not found"} />;
+    return <ErrorMessage message={error || "Không tìm thấy sản phẩm"} />;
   }
 
   const rawGalleryImages = [
@@ -210,7 +211,7 @@ export const ProductDetailPage = () => {
             <div>
               <div className="flex flex-wrap items-center gap-3">
                 <span className="rounded-[10px] bg-[#7c3f18] px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-white">
-                  Mall
+                  Artdict
                 </span>
                 <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#7c3f18]">
                   {product.category_name}
@@ -222,26 +223,26 @@ export const ProductDetailPage = () => {
             </div>
 
             <div className="flex flex-wrap items-center gap-4 text-[1rem] text-slate-600">
-              <span className="font-semibold text-[#7c3f18]">{product.comment_count || 0} Reviews</span>
+              <span className="font-semibold text-[#7c3f18]">{product.comment_count || 0} đánh giá</span>
               <span className="h-5 w-px bg-mist" />
-              <span>{product.sold_count || 0} Sold</span>
+              <span>{product.sold_count || 0} đã bán</span>
               <span className="h-5 w-px bg-mist" />
-              <span>{product.stock} Available</span>
+              <span>Còn {product.stock}</span>
             </div>
 
             <div className="space-y-6">
               <div className="flex flex-wrap items-end gap-4">
                 <span className="text-[2.8rem] font-semibold leading-none text-[#d14d1f] md:text-[3.2rem]">
-                  ${Number(product.price).toFixed(2)}
+                  {formatCurrency(product.price)}
                 </span>
                 <span className="rounded-full bg-[#fff0e8] px-3 py-1 text-sm font-semibold text-[#7c3f18]">
-                  Secure card payment
+                  Thanh toán an toàn qua thẻ
                 </span>
               </div>
 
               <div className="grid gap-5">
                 <div className="grid gap-3 md:grid-cols-[120px,1fr]">
-                  <p className="text-sm font-medium text-slate-500">Artist</p>
+                  <p className="text-sm font-medium text-slate-500">Nhà thiết kế</p>
                   {product.author_name ? (
                     <div className="flex flex-wrap items-center gap-3">
                       <span className="rounded-full bg-[#edf5fd] px-4 py-2 text-sm font-semibold text-tide">
@@ -251,24 +252,24 @@ export const ProductDetailPage = () => {
                         to={`/artists/${product.author_slug}`}
                         className="text-sm font-semibold text-[#7c3f18] underline decoration-[#d9c1a7] underline-offset-4"
                       >
-                        View profile
+                        Xem hồ sơ
                       </Link>
                     </div>
                   ) : (
-                    <p className="text-sm text-slate-600">No artist profile connected yet.</p>
+                    <p className="text-sm text-slate-600">Sản phẩm này chưa gắn với hồ sơ designer.</p>
                   )}
                 </div>
 
                 <div className="grid gap-3 md:grid-cols-[120px,1fr]">
-                  <p className="text-sm font-medium text-slate-500">Shipping</p>
+                  <p className="text-sm font-medium text-slate-500">Giao nhận</p>
                   <div className="space-y-1 text-sm text-slate-600">
-                    <p>Arrives with standard delivery and secure checkout.</p>
-                    <p className="font-semibold text-[#2f7c65]">Shipping fee shown at checkout</p>
+                    <p>Đơn hàng được xác nhận sau khi thanh toán và chuyển sang khâu xử lý/giao nhận.</p>
+                    <p className="font-semibold text-[#2f7c65]">Phí giao hàng được hiển thị ở bước thanh toán</p>
                   </div>
                 </div>
 
                 <div className="grid gap-3 md:grid-cols-[120px,1fr]">
-                  <p className="text-sm font-medium text-slate-500">Quantity</p>
+                  <p className="text-sm font-medium text-slate-500">Số lượng</p>
                   <div className="flex flex-wrap items-center gap-3">
                     <div className="flex gap-3">
                       <input
@@ -280,7 +281,7 @@ export const ProductDetailPage = () => {
                         className="w-24 rounded-full border border-mist bg-white px-4 py-3 text-ink"
                       />
                     </div>
-                    <span className="text-sm text-slate-500">{product.stock} pieces available</span>
+                    <span className="text-sm text-slate-500">Tồn kho {product.stock} sản phẩm</span>
                   </div>
                 </div>
               </div>
@@ -297,14 +298,14 @@ export const ProductDetailPage = () => {
                       : "border-[#d14d1f] bg-[#fff0e8] text-[#d14d1f] hover:bg-[#ffe5d8]"
                   }`}
                 >
-                  {added ? "Added to cart" : "Add to cart"}
+                  {added ? "Đã thêm vào giỏ" : "Thêm vào giỏ"}
                 </button>
                 <button
                   type="button"
                   onClick={handleBuyNow}
                   className="min-w-[220px] rounded-full bg-[#d14d1f] px-6 py-4 text-lg font-semibold text-white transition hover:bg-[#b93f17]"
                 >
-                  Buy now
+                  Mua ngay
                 </button>
               </div>
             ) : (
@@ -313,7 +314,7 @@ export const ProductDetailPage = () => {
                   to="/login"
                   className="inline-flex min-w-[240px] items-center justify-center rounded-full bg-ink px-6 py-4 text-lg font-semibold text-white"
                 >
-                  Login to purchase
+                  Đăng nhập để mua
                 </Link>
               </div>
             )}
@@ -329,31 +330,31 @@ export const ProductDetailPage = () => {
 
       <section className="rounded-[38px] border border-white/60 bg-white/88 p-8 shadow-card">
         <div className="rounded-[8px] border border-[#eadfd3] bg-[#faf6f1] px-6 py-4">
-          <h2 className="text-[1.45rem] font-semibold uppercase tracking-[0.02em] text-ink">Product Details</h2>
+          <h2 className="text-[1.45rem] font-semibold uppercase tracking-[0.02em] text-ink">Thông tin sản phẩm</h2>
         </div>
 
         <div className="mt-8 space-y-8 text-sm md:text-base">
           <div className="grid gap-8 md:grid-cols-[220px,1fr]">
-            <p className="text-slate-400">Category</p>
+            <p className="text-slate-400">Danh mục</p>
             <div className="font-medium text-ink">{product.category_name}</div>
           </div>
           <div className="grid gap-8 md:grid-cols-[220px,1fr]">
-            <p className="text-slate-400">Stock</p>
-            <div className="font-medium text-ink">{product.stock > 0 ? "In stock" : "Out of stock"}</div>
+            <p className="text-slate-400">Tồn kho</p>
+            <div className="font-medium text-ink">{product.stock > 0 ? "Còn hàng" : "Hết hàng"}</div>
           </div>
           <div className="grid gap-8 md:grid-cols-[220px,1fr]">
-            <p className="text-slate-400">Units sold</p>
+            <p className="text-slate-400">Số lượng đã bán</p>
             <div className="font-medium text-ink">{product.sold_count || 0}</div>
           </div>
           <div className="grid gap-8 md:grid-cols-[220px,1fr]">
-            <p className="text-slate-400">Reviews</p>
-            <div className="font-medium text-ink">{product.comment_count || 0} reviews</div>
+            <p className="text-slate-400">Đánh giá</p>
+            <div className="font-medium text-ink">{product.comment_count || 0} đánh giá</div>
           </div>
         </div>
 
         <div className="mt-10 border-t border-[#eadfd3] pt-8">
           <div className="rounded-[8px] border border-[#eadfd3] bg-[#faf6f1] px-6 py-4">
-            <h2 className="text-[1.45rem] font-semibold uppercase tracking-[0.02em] text-ink">Product Description</h2>
+            <h2 className="text-[1.45rem] font-semibold uppercase tracking-[0.02em] text-ink">Mô tả sản phẩm</h2>
           </div>
 
           <div className="mt-8 space-y-5 text-sm leading-8 text-slate-600 md:text-base">
@@ -366,12 +367,12 @@ export const ProductDetailPage = () => {
         <div className="xl:col-span-2 rounded-[38px] border border-white/60 bg-white/88 p-8 shadow-card">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <p className="text-sm uppercase tracking-[0.24em] text-tide">Customer reviews</p>
-              <h2 className="mt-2 font-display text-[2.1rem] text-ink md:text-[2.45rem]">What people are saying</h2>
+              <p className="text-sm uppercase tracking-[0.24em] text-tide">Đánh giá khách hàng</p>
+              <h2 className="mt-2 font-display text-[2.1rem] text-ink md:text-[2.45rem]">Mọi người nói gì về sản phẩm này</h2>
             </div>
             <div className="flex flex-wrap items-center gap-3">
               <div className="rounded-full border border-mist bg-[#fbfaf8] px-4 py-2 text-sm font-semibold text-slate-500">
-                {comments.length} published reviews
+                {comments.length} đánh giá đã hiển thị
               </div>
               {user ? (
                 <button
@@ -385,12 +386,12 @@ export const ProductDetailPage = () => {
                   } disabled:cursor-not-allowed`}
                 >
                   {commentPermissionLoading
-                    ? "Checking review access..."
+                    ? "Đang kiểm tra quyền đánh giá..."
                     : commentPermission?.canComment
-                      ? "Write a review"
+                      ? "Viết đánh giá"
                       : commentPermission?.hasCommented
-                        ? "Review submitted"
-                        : "Purchase required to review"}
+                        ? "Đã gửi đánh giá"
+                        : "Cần mua hàng để đánh giá"}
                 </button>
               ) : null}
             </div>
@@ -398,10 +399,10 @@ export const ProductDetailPage = () => {
 
           <div className="mt-5 flex flex-wrap gap-3 text-sm">
             <div className="rounded-full bg-[#f7f1e8] px-4 py-2 text-[#6f513f]">
-              Only verified buyers can post one review per product
+              Chỉ người mua đã xác minh mới được đăng một đánh giá cho mỗi sản phẩm
             </div>
             <div className="rounded-full bg-[#edf5fd] px-4 py-2 text-[#3e658c]">
-              Optional image or video URL supported
+              Hỗ trợ đính kèm liên kết ảnh hoặc video
             </div>
           </div>
 
@@ -421,7 +422,7 @@ export const ProductDetailPage = () => {
                       <div>
                         <p className="font-semibold text-ink">{comment.user_name}</p>
                         <p className="text-xs uppercase tracking-[0.18em] text-slate-400">
-                          {new Date(comment.created_at).toLocaleDateString()}
+                          {formatShortDate(comment.created_at)}
                         </p>
                       </div>
                       {comment.media_type && (
@@ -434,7 +435,7 @@ export const ProductDetailPage = () => {
                     {comment.media_url && comment.media_type === "image" && (
                       <img
                         src={comment.media_url}
-                        alt="Comment attachment"
+                        alt="Tệp đính kèm đánh giá"
                         className="mt-4 max-h-64 w-full rounded-[20px] object-cover"
                       />
                     )}
@@ -450,7 +451,7 @@ export const ProductDetailPage = () => {
 
             {!comments.length && (
               <div className="rounded-[28px] border border-dashed border-mist bg-[#fbfaf8] p-6 text-sm text-slate-500">
-                No comments yet. Be the first to leave one.
+                Chưa có đánh giá nào. Hãy là người đầu tiên chia sẻ trải nghiệm.
               </div>
             )}
           </div>
@@ -467,10 +468,11 @@ export const ProductDetailPage = () => {
           <div className="w-full max-w-2xl rounded-[36px] border border-white/70 bg-[#fffaf4] p-6 shadow-[0_24px_80px_rgba(23,18,14,0.25)]">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-sm uppercase tracking-[0.24em] text-moss">Leave a review</p>
-                <h2 className="mt-2 font-display text-[2.1rem] text-ink md:text-[2.45rem]">Share your experience</h2>
+                <p className="text-sm uppercase tracking-[0.24em] text-moss">Viết đánh giá</p>
+                <h2 className="mt-2 font-display text-[2.1rem] text-ink md:text-[2.45rem]">Chia sẻ trải nghiệm của bạn</h2>
                 <p className="mt-3 text-sm leading-7 text-slate-600">
-                  Verified buyers can leave one review per product, with up to 500 characters and an optional image or video URL.
+                  Người mua đã xác minh có thể để lại một đánh giá cho mỗi sản phẩm, tối đa 500 ký tự và
+                  có thể đính kèm liên kết ảnh hoặc video.
                 </p>
               </div>
               <button
@@ -481,12 +483,12 @@ export const ProductDetailPage = () => {
                 }}
                 className="rounded-full border border-mist px-4 py-2 text-sm font-semibold text-ink"
               >
-                Close
+                Đóng
               </button>
             </div>
 
             <form onSubmit={submitComment} className="mt-6 rounded-[28px] border border-mist bg-white p-5">
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-moss">Write your comment</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-moss">Nội dung đánh giá</p>
               <textarea
                 rows="5"
                 maxLength={500}
@@ -494,7 +496,7 @@ export const ProductDetailPage = () => {
                 onChange={(event) =>
                   setCommentState((current) => ({ ...current, content: event.target.value }))
                 }
-                placeholder="Share your experience with this product..."
+                placeholder="Hãy chia sẻ cảm nhận của bạn về sản phẩm này..."
                 className="mt-4 w-full rounded-[22px] border border-mist bg-[#fffaf4] px-4 py-3 outline-none"
               />
               <div className="mt-2 text-right text-xs text-slate-500">
@@ -508,8 +510,8 @@ export const ProductDetailPage = () => {
                   }
                   className="rounded-full border border-mist bg-[#fffaf4] px-4 py-3 outline-none"
                 >
-                  <option value="">No media</option>
-                  <option value="image">Image</option>
+                  <option value="">Không có tệp</option>
+                  <option value="image">Ảnh</option>
                   <option value="video">Video</option>
                 </select>
                 <input
@@ -518,7 +520,7 @@ export const ProductDetailPage = () => {
                   onChange={(event) =>
                     setCommentState((current) => ({ ...current, media_url: event.target.value }))
                   }
-                  placeholder="Paste image or video URL"
+                  placeholder="Dán liên kết ảnh hoặc video"
                   className="rounded-full border border-mist bg-[#fffaf4] px-4 py-3 outline-none"
                 />
               </div>
@@ -528,13 +530,13 @@ export const ProductDetailPage = () => {
                 </div>
               ) : null}
               <div className="mt-5 flex items-center justify-between gap-3">
-                <div className="text-sm text-slate-500">One review per buyer. Reviews appear publicly after posting.</div>
+                <div className="text-sm text-slate-500">Mỗi người mua được đánh giá một lần. Đánh giá sẽ hiển thị công khai sau khi gửi.</div>
                 <button
                   type="submit"
                   disabled={commentSubmitting}
                   className="rounded-full bg-ink px-5 py-3 text-sm font-semibold text-white disabled:opacity-50"
                 >
-                  {commentSubmitting ? "Posting..." : "Post comment"}
+                  {commentSubmitting ? "Đang gửi..." : "Gửi đánh giá"}
                 </button>
               </div>
             </form>

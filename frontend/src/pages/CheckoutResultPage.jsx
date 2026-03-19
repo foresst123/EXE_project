@@ -33,17 +33,17 @@ export const CheckoutResultPage = () => {
           await refreshCart();
         }
       } catch (err) {
-        setError(err.response?.data?.message || "Could not load order");
+        setError(err.response?.data?.message || "Không thể tải thông tin đơn hàng");
       } finally {
         setLoading(false);
       }
     };
 
     loadOrder();
-  }, [orderId, status]);
+  }, [orderId, refreshCart, status]);
 
   if (loading) {
-    return <Loader label="Checking payment result..." />;
+    return <Loader label="Đang kiểm tra kết quả thanh toán..." />;
   }
 
   if (error) {
@@ -52,37 +52,38 @@ export const CheckoutResultPage = () => {
 
   return (
     <section className="mx-auto max-w-3xl rounded-[32px] bg-white/90 p-8 shadow-card">
-      <p className="text-sm uppercase tracking-[0.3em] text-moss">Payment result</p>
+      <p className="text-sm uppercase tracking-[0.3em] text-moss">Kết quả thanh toán</p>
       <h1 className="mt-3 font-display text-4xl text-ink">
-        {status === "cancelled" ? "Payment was cancelled" : "Payment flow completed"}
+        {status === "cancelled" ? "Thanh toán đã bị hủy" : "Quy trình thanh toán đã hoàn tất"}
       </h1>
       <p className="mt-4 text-slate-600">
-        Stripe has returned you to the store. The final source of truth is the webhook confirmation recorded on your order.
+        Bạn đã được chuyển về từ Stripe. Trạng thái cuối cùng của đơn hàng sẽ được xác nhận bằng webhook
+        đồng bộ trên hệ thống.
       </p>
 
       {order ? (
         <div className="mt-6 space-y-4 rounded-[28px] border border-mist p-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h2 className="text-xl font-semibold text-ink">Order #{order.id}</h2>
+            <h2 className="text-xl font-semibold text-ink">Đơn hàng #{order.id}</h2>
             <div className="flex gap-2">
               <StatusBadge label={order.payment_status} />
               <StatusBadge label={order.status} />
             </div>
           </div>
           <p className="text-sm text-slate-500">
-            If payment is already marked `paid`, the order has moved into the next step for fulfillment.
+            Nếu trạng thái thanh toán đã là `paid`, đơn hàng đã được chuyển sang bước xử lý tiếp theo.
           </p>
           <div className="flex gap-3">
             <Link to="/orders" className="rounded-full bg-ink px-5 py-3 text-sm font-semibold text-white">
-              View orders
+              Xem đơn hàng
             </Link>
             <Link to="/" className="rounded-full border border-mist px-5 py-3 text-sm font-semibold text-ink">
-              Continue shopping
+              Tiếp tục khám phá
             </Link>
           </div>
         </div>
       ) : (
-        <ErrorMessage message="No order information was returned from checkout." />
+        <ErrorMessage message="Không nhận được thông tin đơn hàng từ phiên thanh toán." />
       )}
     </section>
   );

@@ -22,7 +22,7 @@ export const getCommentPermission = async (productId, userId) => {
   const productResult = await query("SELECT id FROM products WHERE id = $1", [productId]);
 
   if (!productResult.rows[0]) {
-    throw new AppError("Product not found", 404);
+    throw new AppError("Không tìm thấy sản phẩm", 404);
   }
 
   const [purchaseResult, commentResult] = await Promise.all([
@@ -55,31 +55,31 @@ export const createComment = async (productId, user, payload) => {
   const mediaType = mediaUrl ? payload.media_type : null;
 
   if (!content) {
-    throw new AppError("Comment content is required", 422);
+    throw new AppError("Nội dung đánh giá là bắt buộc", 422);
   }
 
   if (content.length > 500) {
-    throw new AppError("Comment must be 500 characters or fewer", 422);
+    throw new AppError("Đánh giá không được vượt quá 500 ký tự", 422);
   }
 
   if (mediaUrl && !mediaType) {
-    throw new AppError("Please choose whether the media is an image or video", 422);
+    throw new AppError("Vui lòng chọn loại tệp là ảnh hoặc video", 422);
   }
 
   const productResult = await query("SELECT id FROM products WHERE id = $1", [productId]);
 
   if (!productResult.rows[0]) {
-    throw new AppError("Product not found", 404);
+    throw new AppError("Không tìm thấy sản phẩm", 404);
   }
 
   const permission = await getCommentPermission(productId, user.id);
 
   if (!permission.hasPurchased) {
-    throw new AppError("Only customers who purchased this product can leave a review", 403);
+    throw new AppError("Chỉ khách đã mua sản phẩm mới có thể đánh giá", 403);
   }
 
   if (permission.hasCommented) {
-    throw new AppError("You have already commented on this product", 409);
+    throw new AppError("Bạn đã đánh giá sản phẩm này rồi", 409);
   }
 
   try {
@@ -93,7 +93,7 @@ export const createComment = async (productId, user, payload) => {
     return result.rows[0];
   } catch (error) {
     if (error.code === "23505") {
-      throw new AppError("You have already commented on this product", 409);
+      throw new AppError("Bạn đã đánh giá sản phẩm này rồi", 409);
     }
 
     throw error;

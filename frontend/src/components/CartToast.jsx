@@ -20,10 +20,10 @@ export const CartToast = ({ notice, onClose }) => {
 
   return (
     <div className="fixed bottom-24 right-6 z-40 w-[min(360px,calc(100vw-2rem))] rounded-[26px] border border-white/70 bg-ink p-4 text-white shadow-2xl">
-      <p className="text-xs uppercase tracking-[0.24em] text-white/50">Added to cart</p>
+      <p className="text-xs uppercase tracking-[0.24em] text-white/50">Đã thêm vào giỏ</p>
       <h3 className="mt-2 text-lg font-semibold">{notice.productName}</h3>
       <p className="mt-1 text-sm text-white/75">
-        Quantity {notice.quantity}. You can keep shopping or review the cart before payment.
+        Số lượng {notice.quantity}. Bạn có thể tiếp tục khám phá hoặc mở giỏ hàng trước khi thanh toán.
       </p>
       <div className="mt-4 flex gap-3">
         <button
@@ -31,10 +31,10 @@ export const CartToast = ({ notice, onClose }) => {
           onClick={onClose}
           className="rounded-full border border-white/20 px-4 py-2 text-sm"
         >
-          Continue
+          Tiếp tục
         </button>
         <Link to="/cart" className="rounded-full bg-clay px-4 py-2 text-sm font-semibold text-white">
-          View cart
+          Xem giỏ hàng
         </Link>
       </div>
     </div>

@@ -10,9 +10,20 @@ const tones = {
   cancelled: "bg-slate-100 text-slate-600",
 };
 
+const labels = {
+  paid: "Đã thanh toán",
+  pending: "Chờ thanh toán",
+  failed: "Thất bại",
+  awaiting_payment: "Chờ thanh toán",
+  payment_failed: "Thanh toán lỗi",
+  processing: "Đang xử lý",
+  shipped: "Đang giao",
+  completed: "Hoàn tất",
+  cancelled: "Đã hủy",
+};
+
 export const StatusBadge = ({ label }) => (
   <span className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ${tones[label] || "bg-slate-100 text-slate-700"}`}>
-    {label.replaceAll("_", " ")}
+    {labels[label] || label.replaceAll("_", " ")}
   </span>
 );
-

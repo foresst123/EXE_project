@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { api } from "../api/client";
 import { useAuth } from "./AuthContext";
 
@@ -10,7 +10,7 @@ export const CartProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [cartNotice, setCartNotice] = useState(null);
 
-  const refreshCart = async () => {
+  const refreshCart = useCallback(async () => {
     if (!user) {
       setCart({ items: [], total: 0 });
       return;
@@ -23,7 +23,7 @@ export const CartProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
 
   const addToCart = async ({ productId, quantity = 1, productName }) => {
     const { data } = await api.post("/cart/add", { product_id: productId, quantity });
@@ -46,10 +46,8 @@ export const CartProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    // Refresh whenever auth state changes so cart content stays in sync.
     refreshCart();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [refreshCart]);
 
   return (
     <CartContext.Provider

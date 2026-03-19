@@ -31,7 +31,7 @@ export const EventsPage = () => {
         const { data } = await api.get("/events");
         setEvents(flattenEvents(data));
       } catch (requestError) {
-        setError(requestError.response?.data?.message || "Failed to load events");
+        setError(requestError.response?.data?.message || "Không thể tải danh sách sự kiện");
       } finally {
         setLoading(false);
       }
@@ -41,18 +41,19 @@ export const EventsPage = () => {
   }, []);
 
   if (loading) {
-    return <Loader label="Loading events..." />;
+    return <Loader label="Đang tải sự kiện..." />;
   }
 
   return (
     <section className="space-y-8  md:px-4 xl:px-10 2xl:px-16">
       <div className="border-b border-[#e8ddd2] pb-6">
-        <p className="text-sm uppercase tracking-[0.3em] text-tide">Events</p>
+        <p className="text-sm uppercase tracking-[0.3em] text-tide">Sự kiện</p>
         <h1 className="mt-4 max-w-4xl text-[2.8rem] font-semibold leading-[1.02] text-ink md:text-[3.8rem]">
-          Event stories and storefront campaigns
+          Câu chuyện cộng đồng và chiến dịch nổi bật trên Artdict
         </h1>
         <p className="mt-4 max-w-3xl text-lg leading-8 text-slate-600">
-          Browse the latest campaign stories in a cleaner editorial list, then open each article for the full event page.
+          Xem nhanh các workshop, chiến dịch giới thiệu bộ sưu tập và hoạt động cộng đồng, sau đó mở
+          từng bài để đọc trọn vẹn nội dung sự kiện.
         </p>
       </div>
 
@@ -81,10 +82,10 @@ export const EventsPage = () => {
                 </h2>
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-slate-500">
                   <span className="font-semibold uppercase tracking-[0.16em] text-tide">
-                    {event.eyebrow || "Store event"}
+                    {event.eyebrow || "Sự kiện Artdict"}
                   </span>
                   {event.subtitle ? <span>{event.subtitle}</span> : null}
-                  <span>{event.slot === "hero" ? "Main event" : "Supporting event"}</span>
+                  <span>{event.slot === "hero" ? "Sự kiện chính" : "Sự kiện hỗ trợ"}</span>
                 </div>
                 <p className="max-w-4xl text-base leading-8 text-slate-600">
                   {event.summary || event.description}
@@ -95,7 +96,7 @@ export const EventsPage = () => {
         </div>
       ) : (
         <div className="rounded-[32px] bg-white/92 p-8 text-slate-600 shadow-card">
-          No events available yet.
+          Hiện chưa có sự kiện nào được công bố.
         </div>
       )}
     </section>

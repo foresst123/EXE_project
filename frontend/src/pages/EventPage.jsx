@@ -6,23 +6,23 @@ import { Loader } from "../components/Loader";
 
 const buildFallbackSections = (event) => [
   {
-    heading: "Event overview",
+    heading: "Tổng quan sự kiện",
     body:
       event.description ||
-      "This campaign page uses a cleaner editorial structure so the promotion feels more deliberate and easier to read.",
+      "Trang sự kiện được trình bày theo phong cách biên tập để người xem dễ đọc và hiểu rõ tinh thần của chiến dịch.",
     image_url: event.banner_image_url,
   },
   {
-    heading: "Why this event matters",
+    heading: "Vì sao sự kiện này đáng chú ý",
     body:
       event.summary ||
-      "A good event page should explain the mood, highlight the purpose of the collection, and make the visual story feel intentional.",
+      "Một sự kiện tốt cần cho thấy mục tiêu, bầu không khí và giá trị của bộ sưu tập chứ không chỉ đơn thuần là banner quảng bá.",
     image_url: event.product_image_url || event.banner_image_url,
   },
   {
-    heading: "How to explore next",
+    heading: "Khám phá tiếp theo",
     body:
-      "Use the event page as context first, then move into the product and category experience after the reader understands the campaign.",
+      "Sau khi đọc câu chuyện của sự kiện, người xem có thể đi sâu vào sản phẩm hoặc danh mục liên quan để hiểu rõ hơn về designer và tác phẩm.",
     image_url: event.banner_image_url,
   },
 ];
@@ -45,7 +45,7 @@ export const EventPage = () => {
         const { data } = await api.get(`/events/${slug}`);
         setEvent(data);
       } catch (requestError) {
-        setError(requestError.response?.data?.message || "Failed to load event");
+        setError(requestError.response?.data?.message || "Không thể tải nội dung sự kiện");
       } finally {
         setLoading(false);
       }
@@ -56,7 +56,7 @@ export const EventPage = () => {
   }, [slug]);
 
   if (loading) {
-    return <Loader label="Loading event..." />;
+    return <Loader label="Đang tải sự kiện..." />;
   }
 
   if (error) {
@@ -64,7 +64,7 @@ export const EventPage = () => {
   }
 
   if (!event) {
-    return <ErrorMessage message="Event not found" />;
+    return <ErrorMessage message="Không tìm thấy sự kiện" />;
   }
 
   const sections =
@@ -78,10 +78,10 @@ export const EventPage = () => {
     <section className="space-y-6">
       <div className="flex flex-wrap items-center gap-3 text-sm text-slate-500">
         <Link to="/" className="font-medium text-ink">
-          Home
+          Trang chủ
         </Link>
         <span>/</span>
-        <span>Events</span>
+        <span>Sự kiện</span>
         <span>/</span>
         <span className="text-slate-700">{event.title}</span>
       </div>
@@ -140,8 +140,8 @@ export const EventPage = () => {
             {galleryImages.length ? (
               <section className="space-y-5 border-t border-[#eee3d9] pt-10">
                 <div className="max-w-3xl">
-                  <p className="text-sm font-semibold uppercase tracking-[0.22em] text-moss">Photo journal</p>
-                  <h2 className="mt-3 text-[1.9rem] font-semibold text-ink md:text-[2.05rem]">A visual thread for the event</h2>
+                  <p className="text-sm font-semibold uppercase tracking-[0.22em] text-moss">Nhật ký hình ảnh</p>
+                  <h2 className="mt-3 text-[1.9rem] font-semibold text-ink md:text-[2.05rem]">Chuỗi hình ảnh của sự kiện</h2>
                 </div>
                 <div className="grid gap-4 md:grid-cols-2">
                   {galleryImages.map((image, index) => (
@@ -160,7 +160,7 @@ export const EventPage = () => {
               <section className="border-t border-[#eee3d9] pt-10">
                 <div className="rounded-[30px] bg-[#f8f3ed] p-6 md:p-8">
                   <div className="space-y-4">
-                    <p className="text-sm font-semibold uppercase tracking-[0.22em] text-moss">Related product</p>
+                    <p className="text-sm font-semibold uppercase tracking-[0.22em] text-moss">Sản phẩm liên quan</p>
                     {event.product_image_url ? (
                       <img
                         src={event.product_image_url}
@@ -169,16 +169,17 @@ export const EventPage = () => {
                       />
                     ) : null}
                     <h2 className="text-[1.9rem] font-semibold text-ink md:text-[2.05rem]">
-                      {event.product_name || "Explore the featured product"}
+                      {event.product_name || "Khám phá sản phẩm nổi bật"}
                     </h2>
                     <p className="text-base leading-8 text-slate-600">
-                      Continue from the event story into the product page when you want to explore the item in more detail.
+                      Khi muốn tìm hiểu sâu hơn, bạn có thể chuyển từ câu chuyện sự kiện sang trang chi
+                      tiết sản phẩm để xem mô tả, giá bán và thông tin designer.
                     </p>
                     <Link
                       to={`/products/${event.product_id}`}
                       className="inline-flex rounded-full bg-ink px-5 py-3 text-sm font-semibold text-white"
                     >
-                      Open featured product
+                      Mở sản phẩm nổi bật
                     </Link>
                   </div>
                 </div>

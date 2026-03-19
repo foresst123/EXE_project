@@ -73,7 +73,7 @@ export const getEventBySlug = async (slug) => {
   );
 
   if (!result.rows[0]) {
-    throw new AppError("Event not found", 404);
+    throw new AppError("Không tìm thấy sự kiện", 404);
   }
 
   return serializeEvent(result.rows[0]);
@@ -127,7 +127,7 @@ export const updateEvent = async (id, payload) => {
   const current = await query("SELECT * FROM events WHERE id = $1", [id]);
 
   if (!current.rows[0]) {
-    throw new AppError("Event not found", 404);
+    throw new AppError("Không tìm thấy sự kiện", 404);
   }
 
   const nextValue = {
@@ -191,7 +191,7 @@ export const deleteEvent = async (id) => {
   const result = await query("DELETE FROM events WHERE id = $1 RETURNING id", [id]);
 
   if (!result.rows[0]) {
-    throw new AppError("Event not found", 404);
+    throw new AppError("Không tìm thấy sự kiện", 404);
   }
 
   return { success: true };

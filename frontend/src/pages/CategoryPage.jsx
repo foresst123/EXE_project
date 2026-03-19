@@ -31,7 +31,7 @@ export const CategoryPage = () => {
         if (!matchedCategory) {
           setProducts([]);
           setCategoryName("");
-          setError("Category not found");
+          setError("Không tìm thấy danh mục");
           return;
         }
 
@@ -43,7 +43,7 @@ export const CategoryPage = () => {
         setProducts(response.data.items);
         setError("");
       } catch (requestError) {
-        setError(requestError.response?.data?.message || "Failed to load category");
+        setError(requestError.response?.data?.message || "Không thể tải danh mục");
       } finally {
         setLoading(false);
       }
@@ -63,12 +63,12 @@ export const CategoryPage = () => {
       setRecentlyAddedId(product.id);
       window.setTimeout(() => setRecentlyAddedId(null), 1600);
     } catch (requestError) {
-      setError(requestError.response?.data?.message || "Failed to add to cart");
+      setError(requestError.response?.data?.message || "Không thể thêm vào giỏ hàng");
     }
   };
 
   if (loading) {
-    return <Loader label="Loading category..." />;
+    return <Loader label="Đang tải danh mục..." />;
   }
 
   if (error && !products.length) {
@@ -78,10 +78,11 @@ export const CategoryPage = () => {
   return (
     <section className="space-y-8">
       <div className="rounded-[40px] border border-white/60 bg-white/88 p-8 shadow-float">
-        <p className="text-sm uppercase tracking-[0.3em] text-tide">Category</p>
+        <p className="text-sm uppercase tracking-[0.3em] text-tide">Danh mục</p>
         <h1 className="mt-4 font-display text-[2.8rem] text-ink md:text-[3.8rem]">{categoryName}</h1>
         <p className="mt-4 max-w-3xl text-lg leading-8 text-slate-600">
-          Explore products grouped under this category and move directly into the product pages that fit this collection.
+          Khám phá những sản phẩm sáng tạo cùng chủ đề và đi thẳng vào trang chi tiết khi bạn muốn
+          xem kỹ chất liệu, câu chuyện và nhà thiết kế phía sau.
         </p>
       </div>
 

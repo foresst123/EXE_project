@@ -2,40 +2,40 @@ import { Link } from "react-router-dom";
 
 const values = [
   {
-    title: "Curated products",
+    title: "Portfolio song song bán hàng",
     description:
-      "We focus on a smaller catalog with stronger storytelling, clearer quality signals, and cleaner product selection.",
+      "Mỗi sản phẩm trên Artdict đều gắn với hồ sơ cá nhân của designer để người mua không chỉ thấy món đồ, mà còn thấy câu chuyện và năng lực sáng tạo phía sau.",
   },
   {
-    title: "Trusted checkout",
+    title: "Trải nghiệm mua đáng tin cậy",
     description:
-      "Payments move through Stripe and only enter fulfillment after the system confirms payment success.",
+      "Artdict ưu tiên minh bạch thông tin, thanh toán rõ ràng và quy trình xác nhận đơn để giảm nỗi lo về chất lượng hay sản phẩm không giống mô tả.",
   },
   {
-    title: "Artist visibility",
+    title: "Cộng đồng phát triển nghề nghiệp",
     description:
-      "Every product can be tied to an artist so shoppers can discover the people behind the collection.",
+      "Ngoài marketplace, nền tảng còn hướng đến workshop, sự kiện và tương tác cộng đồng để designer sinh viên phát triển kỹ năng thực chiến.",
   },
 ];
 
 export const AboutPage = () => (
   <section className="space-y-8">
     <div className="rounded-[40px] border border-white/60 bg-white/88 p-8 shadow-float lg:p-10">
-      <p className="text-sm uppercase tracking-[0.3em] text-moss">About us</p>
+      <p className="text-sm uppercase tracking-[0.3em] text-moss">Giới thiệu</p>
       <h1 className="mt-4 max-w-4xl font-display text-[2.8rem] leading-tight text-ink md:text-[4rem]">
-        A calmer commerce experience built around trust, creators, and clarity.
+        Nền tảng kết nối designer sinh viên với khách hàng qua một trải nghiệm mua sắm sáng tạo và đáng tin cậy.
       </h1>
       <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-600">
-        Artdict is a modern marketplace-style storefront where customers can explore curated
-        products, understand the artist behind each product, and move through a transparent payment
-        flow from cart to confirmed order.
+        Artdict là một hệ sinh thái kết hợp giữa portfolio, marketplace và community, nơi sinh
+        viên thiết kế có thể trưng bày sản phẩm, xây dựng thương hiệu cá nhân, nhận đơn hàng thật
+        và phát triển kỹ năng nghề nghiệp ngay trong môi trường học tập.
       </p>
       <div className="mt-8 flex flex-wrap gap-3">
         <Link to="/" className="rounded-full bg-ink px-5 py-3 text-sm font-semibold text-white">
-          Back to home
+          Về trang chủ
         </Link>
         <Link to="/artists" className="rounded-full border border-mist px-5 py-3 text-sm font-semibold text-ink">
-          Meet our artists
+          Xem nhà thiết kế
         </Link>
       </div>
     </div>

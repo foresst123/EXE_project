@@ -46,37 +46,37 @@ const buildFallbackEvents = (products) => {
 
   const heroPresets = [
     {
-      eyebrow: "Weekend event",
-      subtitle: "Top deals moving now",
-      description: "The main event banner rotates through key promotions while the smaller right-side cards stay fixed.",
+      eyebrow: "Sự kiện cộng đồng",
+      subtitle: "Điểm hẹn sáng tạo cuối tuần",
+      description: "Banner chính luân phiên giới thiệu workshop, chiến dịch và bộ sưu tập mới nổi bật trên Artdict.",
     },
     {
-      eyebrow: "Featured drop",
-      subtitle: "Fresh picks to check",
-      description: "Use the lead area to spotlight products that deserve the first click on the homepage.",
+      eyebrow: "Bộ sưu tập nổi bật",
+      subtitle: "Chọn lọc từ designer sinh viên",
+      description: "Khu vực đầu trang được dùng để đưa những sản phẩm đáng chú ý nhất đến ngay cú nhấp đầu tiên.",
     },
     {
-      eyebrow: "Fast movers",
-      subtitle: "Popular this week",
-      description: "A cleaner event layout that feels promotional without overwhelming the rest of the page.",
+      eyebrow: "Xu hướng tuần này",
+      subtitle: "Những thiết kế được quan tâm nhiều",
+      description: "Cách trình bày gọn gàng giúp trang chủ vẫn giàu cảm hứng mà không tạo cảm giác quá tải.",
     },
     {
-      eyebrow: "Limited highlight",
-      subtitle: "Category push",
-      description: "A compact promotional slot built for category pushes, weekend deals, or new drops.",
+      eyebrow: "Tiêu điểm giới hạn",
+      subtitle: "Từ portfolio đến đơn hàng thật",
+      description: "Một vị trí ngắn gọn để đẩy danh mục, bộ sưu tập mới hoặc chiến dịch ngắn hạn của cộng đồng.",
     },
   ];
 
   const sidePresets = [
     {
-      eyebrow: "Shipping perk",
-      subtitle: "Free delivery focus",
-      description: "A fixed side banner for shipping or store-wide perks.",
+      eyebrow: "Workshop",
+      subtitle: "Cập nhật hoạt động cộng đồng",
+      description: "Khung phụ cố định cho workshop, triển lãm hoặc thông báo ngắn trên nền tảng.",
     },
     {
-      eyebrow: "Store pick",
-      subtitle: "Creator picks this week",
-      description: "A second fixed side banner for weekly curated products.",
+      eyebrow: "Designer pick",
+      subtitle: "Lựa chọn từ cộng đồng sáng tạo",
+      description: "Ô phụ thứ hai dành cho những bộ sưu tập được chọn lọc theo tuần.",
     },
   ];
 
@@ -216,7 +216,7 @@ export const HomePage = () => {
       setEvents(eventsResponse.data);
       setCategoryShelves(buildCategoryShelves(data.items, data.categories));
     } catch (requestError) {
-      setError(requestError.response?.data?.message || "Failed to load products");
+      setError(requestError.response?.data?.message || "Không thể tải dữ liệu trang chủ");
     } finally {
       setLoading(false);
     }
@@ -247,7 +247,7 @@ export const HomePage = () => {
       setRecentlyAddedCardKey(cardKey);
       window.setTimeout(() => setRecentlyAddedCardKey(null), 1600);
     } catch (requestError) {
-      setError(requestError.response?.data?.message || "Failed to add to cart");
+      setError(requestError.response?.data?.message || "Không thể thêm vào giỏ hàng");
     }
   };
 
@@ -314,7 +314,7 @@ export const HomePage = () => {
       {error && <ErrorMessage message={error} />}
 
       {loading ? (
-        <Loader label="Loading storefront..." />
+        <Loader label="Đang tải không gian Artdict..." />
       ) : (
         <>
           <section>
@@ -324,14 +324,14 @@ export const HomePage = () => {
                   type="text"
                   value={searchTerm}
                   onChange={(event) => setSearchTerm(event.target.value)}
-                  placeholder="Search products, collections, or artists..."
+                  placeholder="Tìm sản phẩm, bộ sưu tập hoặc nhà thiết kế..."
                   className="w-full bg-transparent px-3 text-[0.98rem] font-medium text-ink outline-none placeholder:text-slate-400"
                 />
                 <button
                   type="submit"
                   className="rounded-full bg-ink px-5 py-2 text-sm font-semibold text-white transition hover:bg-[#2a211d]"
                 >
-                  Search
+                  Tìm kiếm
                 </button>
               </div>
             </form>
@@ -381,7 +381,7 @@ export const HomePage = () => {
                             -1,
                           )
                         }
-                        label="Show previous event"
+                        label="Xem sự kiện trước"
                         direction="prev"
                         disabled={pendingHeroIndex !== null || isHeroAnimating}
                       />
@@ -389,7 +389,7 @@ export const HomePage = () => {
                     <div className="absolute right-5 top-1/2 z-10 -translate-y-1/2">
                     <ArrowButton
                       onClick={() => startHeroSlide((activeHeroIndex + 1) % heroEvents.length, 1)}
-                      label="Show next event"
+                      label="Xem sự kiện tiếp theo"
                       disabled={pendingHeroIndex !== null || isHeroAnimating}
                     />
                     </div>
@@ -402,7 +402,7 @@ export const HomePage = () => {
                       <button
                         key={event.id}
                         type="button"
-                        aria-label={`Open event ${index + 1}`}
+                        aria-label={`Mở sự kiện ${index + 1}`}
                         onClick={() => startHeroSlide(index, getHeroDirection(index))}
                         disabled={pendingHeroIndex !== null || isHeroAnimating}
                         className={`h-2.5 rounded-full transition ${
@@ -450,14 +450,14 @@ export const HomePage = () => {
 
           <section className="rounded-[34px] bg-white/88 p-5 shadow-card">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <p className="text-sm uppercase tracking-[0.24em] text-moss">Categories</p>
-              </div>
+                <div>
+                  <p className="text-sm uppercase tracking-[0.24em] text-moss">Danh mục</p>
+                </div>
               <div className="flex items-center gap-3">
                 {categoryHighlights.length > 6 ? (
                   <ArrowButton
                     onClick={() => setCategoryIndex((current) => (current + 6) % categoryHighlights.length)}
-                    label="Show more categories"
+                    label="Xem thêm danh mục"
                   />
                 ) : null}
               </div>
@@ -487,11 +487,11 @@ export const HomePage = () => {
             <section className="space-y-5">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <p className="text-sm uppercase tracking-[0.24em] text-moss">Best sellers</p>
-                  <h2 className="mt-2 font-display text-[2.1rem] text-ink md:text-[2.45rem]">Products people are buying now</h2>
+                  <p className="text-sm uppercase tracking-[0.24em] text-moss">Bán chạy</p>
+                  <h2 className="mt-2 font-display text-[2.1rem] text-ink md:text-[2.45rem]">Những sản phẩm đang được yêu thích</h2>
                 </div>
                 <Link to="/shop" className="rounded-full border border-mist px-4 py-2 text-sm font-semibold text-ink">
-                  Shop all
+                  Xem tất cả
                 </Link>
               </div>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
@@ -512,11 +512,11 @@ export const HomePage = () => {
             <section className="space-y-5">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <p className="text-sm uppercase tracking-[0.24em] text-tide">Fresh arrivals</p>
-                  <h2 className="mt-2 font-display text-[2.1rem] text-ink md:text-[2.45rem]">New in the catalog</h2>
+                  <p className="text-sm uppercase tracking-[0.24em] text-tide">Mới cập nhật</p>
+                  <h2 className="mt-2 font-display text-[2.1rem] text-ink md:text-[2.45rem]">Thiết kế vừa lên kệ</h2>
                 </div>
                 <Link to="/shop" className="rounded-full border border-mist px-4 py-2 text-sm font-semibold text-ink">
-                  View all products
+                  Xem toàn bộ sản phẩm
                 </Link>
               </div>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
@@ -538,14 +538,14 @@ export const HomePage = () => {
               <section key={category.id} className="space-y-5">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
-                    <p className="text-sm uppercase tracking-[0.24em] text-tide">Category shelf</p>
+                    <p className="text-sm uppercase tracking-[0.24em] text-tide">Theo danh mục</p>
                     <h2 className="mt-2 font-display text-[2.1rem] text-ink md:text-[2.45rem]">{category.name}</h2>
                   </div>
                   <Link
                     to={`/categories/${slugify(category.name)}`}
                     className="rounded-full border border-mist px-4 py-2 text-sm font-semibold text-ink"
                   >
-                    View all in {category.name}
+                    Xem toàn bộ {category.name}
                   </Link>
                 </div>
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
@@ -567,11 +567,11 @@ export const HomePage = () => {
             <section className="rounded-[34px] border border-white/60 bg-white/88 p-6 shadow-card">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <p className="text-sm uppercase tracking-[0.24em] text-moss">Artists</p>
-                  <h2 className="mt-2 font-display text-[2.1rem] text-ink md:text-[2.45rem]">People behind the products</h2>
+                  <p className="text-sm uppercase tracking-[0.24em] text-moss">Nhà thiết kế</p>
+                  <h2 className="mt-2 font-display text-[2.1rem] text-ink md:text-[2.45rem]">Những gương mặt đứng sau sản phẩm</h2>
                 </div>
                 <Link to="/artists" className="rounded-full border border-mist px-4 py-2 text-sm font-semibold text-ink">
-                  View all artists
+                  Xem tất cả designer
                 </Link>
               </div>
               <div className="mt-5 grid gap-4 md:grid-cols-3">

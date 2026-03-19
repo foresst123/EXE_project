@@ -25,7 +25,7 @@ export const AuthorPage = () => {
         setAuthor(data);
         setError("");
       } catch (requestError) {
-        setError(requestError.response?.data?.message || "Failed to load artist");
+        setError(requestError.response?.data?.message || "Không thể tải hồ sơ nhà thiết kế");
       } finally {
         setLoading(false);
       }
@@ -45,16 +45,16 @@ export const AuthorPage = () => {
       setRecentlyAddedId(product.id);
       window.setTimeout(() => setRecentlyAddedId(null), 1600);
     } catch (requestError) {
-      setError(requestError.response?.data?.message || "Failed to add to cart");
+      setError(requestError.response?.data?.message || "Không thể thêm vào giỏ hàng");
     }
   };
 
   if (loading) {
-    return <Loader label="Loading artist profile..." />;
+    return <Loader label="Đang tải hồ sơ nhà thiết kế..." />;
   }
 
   if (!author) {
-    return <ErrorMessage message={error || "Artist not found"} />;
+    return <ErrorMessage message={error || "Không tìm thấy nhà thiết kế"} />;
   }
 
   return (
@@ -66,15 +66,15 @@ export const AuthorPage = () => {
           className="h-52 w-52 rounded-[28px] object-cover"
         />
         <div className="space-y-4">
-          <p className="text-sm uppercase tracking-[0.28em] text-tide">Artist spotlight</p>
+          <p className="text-sm uppercase tracking-[0.28em] text-tide">Hồ sơ nổi bật</p>
           <h1 className="font-display text-[2.8rem] text-ink md:text-[3.8rem]">{author.name}</h1>
           <p className="max-w-3xl text-lg leading-8 text-slate-600">{author.bio}</p>
           <div className="flex flex-wrap gap-3">
             <span className="rounded-full bg-[#edf5fd] px-4 py-2 text-sm font-semibold text-tide">
-              {author.product_count} products
+              {author.product_count} sản phẩm
             </span>
             <Link to="/" className="rounded-full border border-mist px-4 py-2 text-sm font-semibold text-ink">
-              Back to home
+              Về trang chủ
             </Link>
           </div>
         </div>
@@ -84,8 +84,8 @@ export const AuthorPage = () => {
 
       <div className="space-y-4">
         <div>
-          <p className="text-sm uppercase tracking-[0.24em] text-moss">By this artist</p>
-          <h2 className="mt-2 font-display text-[2.1rem] text-ink md:text-[2.45rem]">Products from {author.name}</h2>
+          <p className="text-sm uppercase tracking-[0.24em] text-moss">Sản phẩm nổi bật</p>
+          <h2 className="mt-2 font-display text-[2.1rem] text-ink md:text-[2.45rem]">Thiết kế của {author.name}</h2>
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
           {author.products.map((product) => (
