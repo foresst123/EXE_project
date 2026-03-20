@@ -6,6 +6,7 @@ import { Loader } from "../components/Loader";
 import { ProductCard } from "../components/ProductCard";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
+import { getAvatarFallback } from "../utils/avatarFallback";
 import { slugify } from "../utils/slugify";
 
 const buildCategoryShelves = (products, categories) =>
@@ -329,7 +330,7 @@ export const HomePage = () => {
                 />
                 <button
                   type="submit"
-                  className="rounded-full bg-ink px-5 py-2 text-sm font-semibold text-white transition hover:bg-[#2a211d]"
+                  className="inline-flex min-w-[8.4rem] shrink-0 items-center justify-center whitespace-nowrap rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#2a211d]"
                 >
                   Tìm kiếm
                 </button>
@@ -581,7 +582,15 @@ export const HomePage = () => {
                     to={`/artists/${author.slug}`}
                     className="flex items-center gap-4 rounded-[24px] border border-mist bg-[#fbfaf8] px-4 py-4 transition hover:-translate-y-1"
                   >
-                    <img src={author.avatar_url} alt={author.name} className="h-16 w-16 rounded-2xl object-cover" />
+                    <img
+                      src={author.avatar_url}
+                      alt={author.name}
+                      className="h-16 w-16 rounded-2xl object-cover"
+                      onError={(event) => {
+                        event.currentTarget.onerror = null;
+                        event.currentTarget.src = getAvatarFallback(author.name);
+                      }}
+                    />
                     <div className="min-w-0 flex-1">
                       <p className="font-semibold text-ink">{author.name}</p>
                       <p className="mt-1 text-sm text-slate-500">{author.bio.slice(0, 78)}...</p>

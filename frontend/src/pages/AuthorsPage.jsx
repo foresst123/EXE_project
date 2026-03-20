@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { api } from "../api/client";
 import { ErrorMessage } from "../components/ErrorMessage";
 import { Loader } from "../components/Loader";
+import { getAvatarFallback } from "../utils/avatarFallback";
 
 export const AuthorsPage = () => {
   const [authors, setAuthors] = useState([]);
@@ -51,7 +52,15 @@ export const AuthorsPage = () => {
             className="group flex flex-col items-center gap-3 text-center"
           >
             <div className="h-24 w-24 overflow-hidden rounded-full border border-white/70 bg-white shadow-card transition duration-300 group-hover:-translate-y-1">
-              <img src={author.avatar_url} alt={author.name} className="h-full w-full object-cover" />
+              <img
+                src={author.avatar_url}
+                alt={author.name}
+                className="h-full w-full object-cover"
+                onError={(event) => {
+                  event.currentTarget.onerror = null;
+                  event.currentTarget.src = getAvatarFallback(author.name);
+                }}
+              />
             </div>
             <p className="text-sm font-semibold leading-6 text-ink transition group-hover:text-[#7c3f18]">
               {author.name}

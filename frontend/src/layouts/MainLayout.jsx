@@ -118,8 +118,8 @@ export const MainLayout = () => {
                   : "border border-transparent bg-[#17130f]/88 shadow-none"
               }`}
             >
-              <div className="grid grid-cols-[1fr_auto_1fr] items-center">
-                <div className="flex items-center gap-3 justify-self-start transition-all delay-[90ms] duration-[1150ms] ease-[cubic-bezier(0.23,0.82,0.2,1)]">
+              <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center">
+                <div className="flex min-w-0 items-center gap-3 justify-self-start transition-all delay-[90ms] duration-[1150ms] ease-[cubic-bezier(0.23,0.82,0.2,1)]">
                   <Link
                     to="/"
                     className="grid h-9 w-9 place-items-center rounded-2xl bg-[linear-gradient(135deg,_#541c4a_0%,_#101933_100%)] text-[0.7rem] font-bold text-white shadow-lg transition-all delay-[90ms] duration-[1150ms] ease-[cubic-bezier(0.23,0.82,0.2,1)]"
@@ -142,9 +142,7 @@ export const MainLayout = () => {
                 </div>
 
                 <nav
-                  className={`hidden items-center justify-center gap-7 transition-all delay-[90ms] duration-[1150ms] ease-[cubic-bezier(0.23,0.82,0.2,1)] xl:flex ${
-                    isFloating ? "xl:-translate-x-6" : ""
-                  }`}
+                  className="hidden items-center justify-center gap-7 transition-all delay-[90ms] duration-[1150ms] ease-[cubic-bezier(0.23,0.82,0.2,1)] xl:flex xl:-translate-x-14"
                 >
                   <NavLink
                     to="/"

@@ -6,6 +6,7 @@ import { Loader } from "../components/Loader";
 import { ProductCard } from "../components/ProductCard";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
+import { getAvatarFallback } from "../utils/avatarFallback";
 
 export const AuthorPage = () => {
   const { slug } = useParams();
@@ -64,6 +65,10 @@ export const AuthorPage = () => {
           src={author.avatar_url}
           alt={author.name}
           className="h-52 w-52 rounded-[28px] object-cover"
+          onError={(event) => {
+            event.currentTarget.onerror = null;
+            event.currentTarget.src = getAvatarFallback(author.name);
+          }}
         />
         <div className="space-y-4">
           <p className="text-sm uppercase tracking-[0.28em] text-tide">Hồ sơ nổi bật</p>

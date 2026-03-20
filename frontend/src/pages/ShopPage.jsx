@@ -214,7 +214,7 @@ export const ShopPage = () => {
                 onChange={(event) => setSearchInput(event.target.value)}
               />
             </div>
-            <button type="submit" className="rounded-full bg-clay px-7 py-3 text-sm font-semibold text-white shadow-[0_10px_24px_rgba(200,93,37,0.22)]">
+            <button type="submit" className="inline-flex min-w-[8.4rem] shrink-0 items-center justify-center whitespace-nowrap rounded-full bg-clay px-5 py-3 text-sm font-semibold text-white shadow-[0_10px_24px_rgba(200,93,37,0.22)]">
               Tìm kiếm
             </button>
           </form>
