@@ -83,7 +83,7 @@ export const MainLayout = () => {
       {!isStandalonePage ? (
         <header className="z-30 w-full pt-0">
           <div className="w-full">
-            <div className="w-full bg-[linear-gradient(135deg,#ed0000_0%,#ff1515_62%,#a70000_100%)] px-8 py-5 shadow-[0_16px_36px_rgba(167,0,0,0.24)] md:px-10 md:py-6">
+            <div className="w-full bg-[#363636] px-8 py-5 shadow-[0_16px_36px_rgba(31,31,31,0.28)] md:px-10 md:py-6">
               <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center">
                 <div className="flex min-w-0 items-center gap-3 justify-self-start">
                   <Link
