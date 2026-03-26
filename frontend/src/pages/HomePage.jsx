@@ -9,22 +9,27 @@ import { useAuth } from "../context/AuthContext";
 import { getAvatarFallback } from "../utils/avatarFallback";
 import { slugify } from "../utils/slugify";
 
-const buildCategoryShelves = (products, categories) =>
-  categories
-    .map((category) => {
-      const categoryProducts = products.filter((product) => product.category_name === category.name);
-      const shuffledItems = [...categoryProducts].sort(() => Math.random() - 0.5);
-      const sampleSize = shuffledItems.length > 1 ? (Math.random() > 0.5 ? 2 : 1) : 1;
-      const items = shuffledItems.slice(0, sampleSize);
+const CATEGORY_SHELF_PRODUCT_LIMIT = 12;
 
-      return {
-        ...category,
-        items,
-      };
-    })
-    .filter((category) => category.items.length)
-    .sort(() => Math.random() - 0.5)
-    .slice(0, 2);
+const buildCategoryShelves = (products, categories) =>
+  (() => {
+    const populatedCategories = categories
+    .map((category) => ({
+      ...category,
+      items: products
+        .filter((product) => product.category_name === category.name)
+        .sort(
+          (first, second) =>
+            Number(second.sold_count || 0) - Number(first.sold_count || 0) || Number(second.id) - Number(first.id),
+        ),
+    }))
+      .filter((category) => category.items.length);
+
+    const categoryCount =
+      populatedCategories.length <= 1 ? populatedCategories.length : Math.random() > 0.5 ? 2 : 1;
+
+    return [...populatedCategories].sort(() => Math.random() - 0.5).slice(0, categoryCount);
+  })();
 
 const buildCategoryHighlights = (products, categories) =>
   categories
@@ -539,8 +544,7 @@ export const HomePage = () => {
               <section key={category.id} className="space-y-5">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
-                    <p className="text-sm uppercase tracking-[0.24em] text-tide">Theo danh mục</p>
-                    <h2 className="mt-2 font-display text-[2.1rem] text-ink md:text-[2.45rem]">{category.name}</h2>
+                    <h2 className="font-display text-[2.1rem] text-ink md:text-[2.45rem]">{category.name}</h2>
                   </div>
                   <Link
                     to={`/categories/${slugify(category.name)}`}
@@ -550,7 +554,7 @@ export const HomePage = () => {
                   </Link>
                 </div>
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-                  {category.items.map((product) => (
+                  {category.items.slice(0, CATEGORY_SHELF_PRODUCT_LIMIT).map((product) => (
                     <ProductCard
                       key={`${category.id}-${product.id}`}
                       product={product}

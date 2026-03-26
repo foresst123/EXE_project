@@ -49,7 +49,6 @@ export const MainLayout = () => {
   const location = useLocation();
   const { user, logout } = useAuth();
   const { cart, cartNotice, clearCartNotice } = useCart();
-  const [isFloating, setIsFloating] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef(null);
   const isSearchPage = location.pathname === "/shop";
@@ -57,30 +56,15 @@ export const MainLayout = () => {
   const isAuthPage = location.pathname === "/login" || location.pathname === "/register";
   const isStandalonePage = isSearchPage || isAccountPage || isAuthPage;
   const cartItemCount = cart.items.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
-  const brandTextClass = "text-[#17120e]";
-  const secondaryTextClass = "text-[#342923]";
+  const secondaryTextClass = "text-white/92";
   const navItemClass = (isActive) =>
     `px-1 py-1 transition ${
       isActive
-        ? "text-[1.2rem] font-bold text-[#7c3f18]"
-        : "text-[1.06rem] font-semibold text-[#3b2f29] hover:text-[1.1rem] hover:font-bold hover:text-[#111827]"
+        ? "text-[1.22rem] font-extrabold text-[#ffdd57]"
+        : "text-[1.06rem] font-semibold text-white/90 hover:text-[1.1rem] hover:font-bold hover:text-[#ffad00]"
     }`;
 
-  useEffect(() => {
-    if (isStandalonePage) {
-      setIsFloating(false);
-      return undefined;
-    }
-
-    const handleScroll = () => {
-      setIsFloating(window.scrollY > 180);
-    };
-
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [isStandalonePage]);
+  const isFloating = false;
 
   useEffect(() => {
     const handlePointerDown = (event) => {
@@ -94,55 +78,24 @@ export const MainLayout = () => {
     return () => document.removeEventListener("mousedown", handlePointerDown);
   }, []);
 
-  useEffect(() => {
-    if (isFloating) {
-      setProfileOpen(false);
-    }
-  }, [isFloating]);
-
   return (
     <div className="min-h-screen text-ink">
       {!isStandalonePage ? (
-        <header
-          className="sticky top-0 z-30 px-4 pt-4 transition-all delay-[90ms] duration-[1150ms] ease-[cubic-bezier(0.23,0.82,0.2,1)] md:px-6"
-        >
-          <div
-            className={`mx-auto transition-all delay-[90ms] duration-[1150ms] ease-[cubic-bezier(0.23,0.82,0.2,1)] ${
-              isFloating ? "nav-shell-floating px-0" : "nav-shell px-0"
-            }`}
-          >
-            <div
-              className={`rounded-[40px] px-7 py-3 transition-all delay-[90ms] duration-[1150ms] ease-[cubic-bezier(0.23,0.82,0.2,1)] ${
-                isFloating
-                  ? "border border-white/16 bg-[#17130f]/96 shadow-float backdrop-blur"
-                  : "border border-transparent bg-[#17130f]/88 shadow-none"
-              }`}
-            >
+        <header className="z-30 w-full pt-0">
+          <div className="w-full">
+            <div className="w-full bg-[linear-gradient(135deg,#ed0000_0%,#ff1515_62%,#a70000_100%)] px-8 py-5 shadow-[0_16px_36px_rgba(167,0,0,0.24)] md:px-10 md:py-6">
               <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center">
-                <div className="flex min-w-0 items-center gap-3 justify-self-start transition-all delay-[90ms] duration-[1150ms] ease-[cubic-bezier(0.23,0.82,0.2,1)]">
+                <div className="flex min-w-0 items-center gap-3 justify-self-start">
                   <Link
                     to="/"
-                    className="grid h-9 w-9 place-items-center rounded-2xl bg-[linear-gradient(135deg,_#541c4a_0%,_#101933_100%)] text-[0.7rem] font-bold text-white shadow-lg transition-all delay-[90ms] duration-[1150ms] ease-[cubic-bezier(0.23,0.82,0.2,1)]"
+                    className="inline-flex items-center"
                   >
-                    ART
+                    <img src="/artdict-logo.png" alt="Artdict logo" className="h-20 w-auto object-contain md:h-24" />
                   </Link>
-
-                  <div className="overflow-hidden transition-all delay-[90ms] duration-[1150ms] ease-[cubic-bezier(0.23,0.82,0.2,1)]">
-                    {isFloating ? (
-                      <span className={`text-[1.8rem] font-semibold leading-none ${brandTextClass}`}>|</span>
-                    ) : (
-                      <Link
-                        to="/"
-                        className={`font-display text-[2.15rem] font-semibold leading-none tracking-tight ${brandTextClass}`}
-                      >
-                        Artdict
-                      </Link>
-                    )}
-                  </div>
                 </div>
 
                 <nav
-                  className="hidden items-center justify-center gap-7 transition-all delay-[90ms] duration-[1150ms] ease-[cubic-bezier(0.23,0.82,0.2,1)] xl:flex xl:-translate-x-14"
+                  className="hidden items-center justify-center gap-7 xl:flex xl:-translate-x-14"
                 >
                   <NavLink
                     to="/"
@@ -179,7 +132,7 @@ export const MainLayout = () => {
                   </NavLink>
                 </nav>
 
-                <div className="flex shrink-0 items-center gap-2 justify-self-end transition-all delay-[90ms] duration-[1150ms] ease-[cubic-bezier(0.23,0.82,0.2,1)]">
+                <div className="flex shrink-0 items-center gap-2 justify-self-end">
                   {user ? (
                     <NavLink
                       to="/cart"
@@ -187,7 +140,7 @@ export const MainLayout = () => {
                         `relative inline-flex items-center rounded-full px-4 py-2 text-[0.96rem] font-semibold transition ${
                           isActive
                             ? "bg-[#f3e7db] text-[#7c3f18]"
-                            : "text-[#17120e] hover:bg-black/5"
+                            : "text-white hover:bg-white/14"
                         }`
                       }
                       aria-label="Giỏ hàng"
@@ -206,7 +159,7 @@ export const MainLayout = () => {
                         type="button"
                         onClick={() => setProfileOpen((current) => !current)}
                         className={`flex items-center gap-2 rounded-full px-1 py-1 transition ${
-                          "text-[#17120e] hover:bg-black/5"
+                          "text-white hover:bg-white/14"
                         }`}
                       >
                         <span className="grid h-9 w-9 place-items-center rounded-full bg-[#f2eee9] text-[#17130f]">
@@ -293,14 +246,14 @@ export const MainLayout = () => {
                       <NavLink
                         to="/login"
                         className={`inline-flex shrink-0 items-center whitespace-nowrap rounded-full border border-white/16 bg-white/10 px-4 py-2 text-[0.98rem] font-medium transition hover:bg-white/14 ${
-                          "text-[#17120e]"
+                          "text-white"
                         }`}
                       >
                         Đăng nhập
                       </NavLink>
                       <NavLink
                         to="/register"
-                        className="inline-flex shrink-0 items-center whitespace-nowrap rounded-full bg-[#f2eee9] px-4 py-2 text-[0.98rem] font-medium text-[#17130f] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
+                        className="inline-flex shrink-0 items-center whitespace-nowrap rounded-full bg-[#ffad00] px-4 py-2 text-[0.98rem] font-semibold text-[#600000] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-[#ffc333]"
                       >
                         Đăng ký
                       </NavLink>

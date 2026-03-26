@@ -179,14 +179,8 @@ export const ShopPage = () => {
         <div className="flex flex-col gap-5">
           <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
             <div className="flex items-center gap-4">
-              <Link
-                to="/"
-                className="grid h-11 w-11 place-items-center rounded-2xl bg-[linear-gradient(135deg,_#541c4a_0%,_#101933_100%)] text-[0.78rem] font-bold text-white shadow-lg"
-              >
-                ART
-              </Link>
-              <Link to="/" className="font-display text-[2rem] font-semibold tracking-tight text-ink">
-                Artdict
+              <Link to="/" className="inline-flex items-center">
+                <img src="/artdict-logo.png" alt="Artdict logo" className="h-16 w-auto object-contain" />
               </Link>
             </div>
 

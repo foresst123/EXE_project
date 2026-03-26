@@ -5,11 +5,11 @@
 @tailwind utilities;
 
 :root {
-  color: #152238;
+  color: #3b3b3d;
   background:
-    radial-gradient(circle at 15% 15%, rgba(255, 168, 76, 0.18), transparent 30%),
-    radial-gradient(circle at 85% 0%, rgba(27, 124, 217, 0.12), transparent 30%),
-    linear-gradient(180deg, #f8efe2 0%, #fbfaf7 32%, #f6f9fc 100%);
+    radial-gradient(circle at 14% 14%, rgba(237, 0, 0, 0.16), transparent 30%),
+    radial-gradient(circle at 86% 0%, rgba(255, 173, 0, 0.14), transparent 30%),
+    linear-gradient(180deg, #fff5f3 0%, #fff8ef 34%, #f4f4f5 100%);
   font-family: "Geist", "Manrope", Helvetica, Arial, sans-serif;
 }
 
@@ -98,5 +98,5 @@ textarea {
 }
 
 ::selection {
-  background: rgba(15, 76, 129, 0.18);
+  background: rgba(237, 0, 0, 0.2);
 }

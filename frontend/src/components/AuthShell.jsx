@@ -3,11 +3,8 @@ import { Link } from "react-router-dom";
 export const AuthShell = ({ eyebrow, title, subtitle, footerText, footerLink, footerLabel, children }) => (
   <section className="mx-auto max-w-5xl space-y-10 py-6">
     <header className="flex items-center justify-center md:justify-start">
-      <Link to="/" className="flex items-center gap-4">
-        <span className="grid h-12 w-12 place-items-center rounded-2xl bg-[linear-gradient(135deg,_#541c4a_0%,_#101933_100%)] text-sm font-bold text-white shadow-lg">
-          ART
-        </span>
-        <span className="font-display text-[2rem] font-semibold tracking-tight text-ink">Artdict</span>
+      <Link to="/" className="inline-flex items-center">
+        <img src="/artdict-logo.png" alt="Artdict logo" className="h-16 w-auto object-contain" />
       </Link>
     </header>
 
