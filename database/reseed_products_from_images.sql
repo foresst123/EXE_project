@@ -77,7 +77,7 @@ SELECT
   p.stock,
   c.id,
   a.id,
-  '/product img/' || p.filename
+  '/product-img/' || p.filename
 FROM prepared p
 JOIN categories c ON c.name = p.category_name
 JOIN authors a ON a.slug = p.author_slug;
@@ -99,6 +99,71 @@ INSERT INTO events (
 )
 VALUES
   (
+    'behind-the-project-tu-brief-lop-den-san-pham',
+    'Behind the Project: Từ Brief Lớp Đến Sản Phẩm Bán Được',
+    'Nội dung cộng đồng',
+    'Biến ý tưởng thành sản phẩm có thể bán',
+    'Sự kiện tập trung vào hành trình biến bản phác thảo ban đầu thành sản phẩm hoàn chỉnh: từ ý tưởng, phối màu, chỉnh chất liệu đến trưng bày và thương mại hóa.',
+    'Một sự kiện hero dành cho người quan tâm quá trình làm sản phẩm sáng tạo từ đầu đến cuối.',
+    '["Quy trình tạo sản phẩm", "Từ concept đến bán hàng", "Bài học thực chiến cho designer trẻ"]'::jsonb,
+    '[
+      {"heading":"Từ concept đến sản phẩm thật","body":"Sự kiện mô tả cách một ý tưởng ban đầu được cụ thể hóa thành sản phẩm có thể trưng bày và bán trên sàn.","image_url":"/product-img/tranh-thong-diep-thiengu-x-hap-1.png"},
+      {"heading":"Hoàn thiện portfolio cùng sản phẩm","body":"Người tham gia học cách kể câu chuyện thiết kế, chụp ảnh sản phẩm và xây hồ sơ creator nhất quán.","image_url":"/product-img/tranh-thong-diep-thiengu-x-hap-2.png"}
+    ]'::jsonb,
+    '[
+      "/product-img/tranh-thong-diep-thiengu-x-hap-1.png",
+      "/product-img/tranh-thong-diep-thiengu-x-hap-2.png",
+      "/product-img/tranh-thong-diep-thiengu-x-hap-3.png"
+    ]'::jsonb,
+    '/product-img/tranh-thong-diep-thiengu-x-hap-1.png',
+    'hero',
+    1,
+    (SELECT id FROM products WHERE name = 'Tranh Thông Điệp ThieNgu x HAP 01' LIMIT 1)
+  ),
+  (
+    'creator-of-the-week-fpt-designers',
+    'Creator of the Week: Gương Mặt Thiết Kế Nổi Bật',
+    'Portfolio & cộng đồng',
+    'Spotlight creator có cá tính thị giác rõ ràng',
+    'Sự kiện tôn vinh các creator có phong cách thiết kế nổi bật, hình ảnh chỉn chu và khả năng kể chuyện sản phẩm tốt.',
+    'Event hero nhấn mạnh giá trị thương hiệu cá nhân của designer trên nền tảng.',
+    '["Spotlight creator", "Tăng nhận diện cá nhân", "Khuyến khích cộng đồng sáng tạo"]'::jsonb,
+    '[
+      {"heading":"Tạo niềm tin từ hồ sơ cá nhân","body":"Khi profile rõ ràng và sản phẩm nhất quán, khách hàng dễ đưa ra quyết định mua hơn.","image_url":"/product-img/654746562_122200870490377174_4682948422842574640_n.jpg"},
+      {"heading":"Tăng cơ hội bán hàng cho creator","body":"Các creator được giới thiệu sẽ có thêm lượt xem sản phẩm, lượt lưu và khả năng chuyển đổi đơn hàng.","image_url":"/product-img/655018572_122200490258377174_1095625658677615712_n.jpg"}
+    ]'::jsonb,
+    '[
+      "/product-img/654746562_122200870490377174_4682948422842574640_n.jpg",
+      "/product-img/655018572_122200490258377174_1095625658677615712_n.jpg"
+    ]'::jsonb,
+    '/product-img/654746562_122200870490377174_4682948422842574640_n.jpg',
+    'hero',
+    2,
+    (SELECT id FROM products WHERE name = 'Poster Nghệ Thuật Đương Đại 01' LIMIT 1)
+  ),
+  (
+    'campus-booth-artdict',
+    'Campus Booth Artdict: Trải Nghiệm Sản Phẩm Thật',
+    'Trải nghiệm offline',
+    'Kết nối online và booth trưng bày tại trường',
+    'Sự kiện mô phỏng không gian booth trưng bày để người dùng xem sản phẩm trực tiếp, quét mã xem profile creator và đặt hàng ngay trên web.',
+    'Event hero kết nối trải nghiệm offline với hành trình mua online.',
+    '["Booth thực tế", "Xem sản phẩm trực tiếp", "Quét mã vào trang creator"]'::jsonb,
+    '[
+      {"heading":"Chạm sản phẩm trước khi quyết định","body":"Người dùng có thể trải nghiệm chất liệu, màu sắc thực tế trước khi quay lại mua online.","image_url":"/product-img/tranh-2.jpg"},
+      {"heading":"Mua ngay bằng trải nghiệm liền mạch","body":"Sau khi tham quan booth, người dùng tiếp tục đặt hàng qua website với cùng sản phẩm đã xem.","image_url":"/product-img/tranh-3.jpg"}
+    ]'::jsonb,
+    '[
+      "/product-img/tranh-2.jpg",
+      "/product-img/tranh-3.jpg",
+      "/product-img/tranh-4.jpg"
+    ]'::jsonb,
+    '/product-img/tranh-2.jpg',
+    'hero',
+    3,
+    (SELECT id FROM products WHERE name = 'Tranh Canvas Tối Giản 02' LIMIT 1)
+  ),
+  (
     'silk-story-jay-le-soft-lines',
     'Silk Story: Soft Lines Collection',
     'Bộ sưu tập mới',
@@ -107,11 +172,11 @@ VALUES
     'Giới thiệu mẫu khăn lụa Jay LE 01 với ngôn ngữ thị giác trẻ trung và ứng dụng cao.',
     '["Chất liệu nhẹ, dễ phối", "Tạo điểm nhấn nhanh cho trang phục", "Phù hợp phong cách hằng ngày"]'::jsonb,
     '[
-      {"heading":"Từ họa tiết đến ứng dụng thực tế","body":"Mẫu khăn hướng đến việc phối nhanh với áo basic, blazer hoặc túi xách để tăng điểm nhấn mà vẫn giữ tổng thể gọn gàng.","image_url":"/product img/khan-lua-jay-le-1.png"},
-      {"heading":"Ngôn ngữ thị giác trẻ trung","body":"Bộ màu và nhịp điệu họa tiết được chọn để dễ dùng trong nhiều ngữ cảnh: đi học, đi làm, đi chơi.","image_url":"/product img/khan-lua-jay-le-1.png"}
+      {"heading":"Từ họa tiết đến ứng dụng thực tế","body":"Mẫu khăn hướng đến việc phối nhanh với áo basic, blazer hoặc túi xách để tăng điểm nhấn mà vẫn giữ tổng thể gọn gàng.","image_url":"/product-img/khan-lua-jay-le-1.png"},
+      {"heading":"Ngôn ngữ thị giác trẻ trung","body":"Bộ màu và nhịp điệu họa tiết được chọn để dễ dùng trong nhiều ngữ cảnh: đi học, đi làm, đi chơi.","image_url":"/product-img/khan-lua-jay-le-1.png"}
     ]'::jsonb,
-    '["/product img/khan-lua-jay-le-1.png"]'::jsonb,
-    '/product img/khan-lua-jay-le-1.png',
+    '["/product-img/khan-lua-jay-le-1.png"]'::jsonb,
+    '/product-img/khan-lua-jay-le-1.png',
     'side',
     1,
     (SELECT id FROM products WHERE name = 'Khăn Lụa Họa Tiết Jay LE 01' LIMIT 1)
@@ -125,11 +190,11 @@ VALUES
     'Mẫu Jay LE 02 dành cho người muốn tạo dấu ấn thị giác mạnh hơn trong cùng hệ khăn lụa.',
     '["Tông màu tạo độ nổi cao", "Phối tốt với trang phục trung tính", "Dùng được cho cả tóc, cổ và túi"]'::jsonb,
     '[
-      {"heading":"Điểm nhấn cho outfit tối giản","body":"Khi kết hợp với áo trơn hoặc gam màu trung tính, khăn lụa giúp tổng thể có chiều sâu hơn mà không rối mắt.","image_url":"/product img/khan-lua-jay-le-2.png"},
-      {"heading":"Linh hoạt nhiều kiểu phối","body":"Có thể buộc cổ, buộc tóc hoặc tạo điểm nhấn cho túi xách để thay đổi phong cách nhanh trong ngày.","image_url":"/product img/khan-lua-jay-le-2.png"}
+      {"heading":"Điểm nhấn cho outfit tối giản","body":"Khi kết hợp với áo trơn hoặc gam màu trung tính, khăn lụa giúp tổng thể có chiều sâu hơn mà không rối mắt.","image_url":"/product-img/khan-lua-jay-le-2.png"},
+      {"heading":"Linh hoạt nhiều kiểu phối","body":"Có thể buộc cổ, buộc tóc hoặc tạo điểm nhấn cho túi xách để thay đổi phong cách nhanh trong ngày.","image_url":"/product-img/khan-lua-jay-le-2.png"}
     ]'::jsonb,
-    '["/product img/khan-lua-jay-le-2.png"]'::jsonb,
-    '/product img/khan-lua-jay-le-2.png',
+    '["/product-img/khan-lua-jay-le-2.png"]'::jsonb,
+    '/product-img/khan-lua-jay-le-2.png',
     'side',
     2,
     (SELECT id FROM products WHERE name = 'Khăn Lụa Họa Tiết Jay LE 02' LIMIT 1)
