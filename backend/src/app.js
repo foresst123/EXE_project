@@ -14,6 +14,21 @@ import { asyncHandler } from "./utils/asyncHandler.js";
 
 const app = express();
 
+app.use((req, res, next) => {
+  const startedAt = Date.now();
+  const requestMeta = `[REQ] ${req.method} ${req.originalUrl}`;
+  console.log(requestMeta);
+
+  res.on("finish", () => {
+    const durationMs = Date.now() - startedAt;
+    console.log(
+      `[RES] ${req.method} ${req.originalUrl} -> ${res.statusCode} (${durationMs}ms)`,
+    );
+  });
+
+  next();
+});
+
 app.use(
   cors({
     origin: env.clientUrl,
