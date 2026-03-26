@@ -82,4 +82,57 @@ FROM prepared p
 JOIN categories c ON c.name = p.category_name
 JOIN authors a ON a.slug = p.author_slug;
 
+INSERT INTO events (
+  slug,
+  title,
+  eyebrow,
+  subtitle,
+  description,
+  summary,
+  highlights,
+  content,
+  gallery_images,
+  banner_image_url,
+  slot,
+  sort_order,
+  product_id
+)
+VALUES
+  (
+    'silk-story-jay-le-soft-lines',
+    'Silk Story: Soft Lines Collection',
+    'Bộ sưu tập mới',
+    'Khăn lụa Jay LE 01',
+    'Thiết kế khăn lụa tập trung vào đường nét mềm và bảng màu nổi bật, phù hợp để tạo điểm nhấn cho outfit đi học, đi làm hoặc gặp gỡ cuối tuần.',
+    'Giới thiệu mẫu khăn lụa Jay LE 01 với ngôn ngữ thị giác trẻ trung và ứng dụng cao.',
+    '["Chất liệu nhẹ, dễ phối", "Tạo điểm nhấn nhanh cho trang phục", "Phù hợp phong cách hằng ngày"]'::jsonb,
+    '[
+      {"heading":"Từ họa tiết đến ứng dụng thực tế","body":"Mẫu khăn hướng đến việc phối nhanh với áo basic, blazer hoặc túi xách để tăng điểm nhấn mà vẫn giữ tổng thể gọn gàng.","image_url":"/product img/khan-lua-jay-le-1.png"},
+      {"heading":"Ngôn ngữ thị giác trẻ trung","body":"Bộ màu và nhịp điệu họa tiết được chọn để dễ dùng trong nhiều ngữ cảnh: đi học, đi làm, đi chơi.","image_url":"/product img/khan-lua-jay-le-1.png"}
+    ]'::jsonb,
+    '["/product img/khan-lua-jay-le-1.png"]'::jsonb,
+    '/product img/khan-lua-jay-le-1.png',
+    'side',
+    1,
+    (SELECT id FROM products WHERE name = 'Khăn Lụa Họa Tiết Jay LE 01' LIMIT 1)
+  ),
+  (
+    'silk-story-jay-le-bold-accent',
+    'Silk Story: Bold Accent Collection',
+    'Gợi ý phối đồ',
+    'Khăn lụa Jay LE 02',
+    'Mẫu khăn lụa thứ hai mang tinh thần nổi bật hơn, phù hợp với những set đồ cần điểm nhấn rõ ràng nhưng vẫn tinh tế.',
+    'Mẫu Jay LE 02 dành cho người muốn tạo dấu ấn thị giác mạnh hơn trong cùng hệ khăn lụa.',
+    '["Tông màu tạo độ nổi cao", "Phối tốt với trang phục trung tính", "Dùng được cho cả tóc, cổ và túi"]'::jsonb,
+    '[
+      {"heading":"Điểm nhấn cho outfit tối giản","body":"Khi kết hợp với áo trơn hoặc gam màu trung tính, khăn lụa giúp tổng thể có chiều sâu hơn mà không rối mắt.","image_url":"/product img/khan-lua-jay-le-2.png"},
+      {"heading":"Linh hoạt nhiều kiểu phối","body":"Có thể buộc cổ, buộc tóc hoặc tạo điểm nhấn cho túi xách để thay đổi phong cách nhanh trong ngày.","image_url":"/product img/khan-lua-jay-le-2.png"}
+    ]'::jsonb,
+    '["/product img/khan-lua-jay-le-2.png"]'::jsonb,
+    '/product img/khan-lua-jay-le-2.png',
+    'side',
+    2,
+    (SELECT id FROM products WHERE name = 'Khăn Lụa Họa Tiết Jay LE 02' LIMIT 1)
+  );
+
 COMMIT;

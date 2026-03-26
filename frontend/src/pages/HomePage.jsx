@@ -122,8 +122,6 @@ const HERO_SLIDE_DURATION = 760;
 const heroSlideTransitionClass =
   "transition-transform duration-[760ms] ease-[cubic-bezier(0.22,1,0.36,1)]";
 
-const SIDE_EVENT_IMAGES = ["/product img/khan-lua-jay-le-1.png", "/product img/khan-lua-jay-le-2.png"];
-
 const EventArrowIcon = ({ direction = "next" }) => (
   <svg
     viewBox="0 0 24 24"
@@ -423,14 +421,14 @@ export const HomePage = () => {
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-1">
-                {sideEvents.map((event, index) => (
+                {sideEvents.map((event) => (
                   <Link
                     key={event.id}
                     to={getEventHref(event)}
                     className="relative min-h-[clamp(10.5rem,12vw,11.75rem)] overflow-hidden rounded-[26px] border border-white/60 shadow-card"
                   >
                     <img
-                      src={SIDE_EVENT_IMAGES[index % SIDE_EVENT_IMAGES.length]}
+                      src={event.banner_image_url}
                       alt={event.title}
                       className="absolute inset-0 h-full w-full object-cover"
                     />
